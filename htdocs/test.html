@@ -1,0 +1,64 @@
+<html>
+<head>
+    <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
+    <script type="text/javascript" src="js/iuframe.js"></script>
+</head>
+
+<style id=default>
+    #test{
+        position:relative;
+        width:100px;
+        height:100px;
+        background-color:blue;
+    }
+#test2{
+    position:relative;
+    width:100px;
+    height:100px;
+    background-color:red;
+}
+</style>
+<style type="text/css" media="screen and (max-width:800px)">
+    #test{
+        width:100px;
+        height:100px;
+        background-color:red;
+    }
+    </style>
+<body>
+
+<div id="test">
+<p>hehehehe</p>
+<p>hahaha</p>
+</div>
+<div id="test2" >
+<p> kiki </p>
+</div>
+<!--
+<p>Click the button to wait 3 seconds, then alert "Hello".</p>
+<p>After clicking away the alert box, an new alert box will appear in 3 seconds. This goes on forever...</p>
+<button onclick="myFunction()">Try it</button>
+-->
+
+<table border="1" cellpadding="4"><tr>
+    <td valign="top">
+    
+	
+    <!-- After loading the html and just before we start running JavaScripts
+     on the page, we install a console object on the window that implements
+     a log() method in Objective-C code.  The log button in this section
+     calls the DoLogAction function that calls through to our Objective-C logging
+     method.  -->
+	<form>
+        <p>Call our console.log() method<BR>
+        Text:
+        <input style="100" type=text id="inputValue" value="LOG MESSAGE TEXT">
+            <input type=button value="LOG" onClick="DoLogAction();"><BR>
+                (view results in the run log)</P>
+                </form>
+    
+</td></tr>
+</table>
+</body>
+</html>
