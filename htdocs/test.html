@@ -6,17 +6,25 @@
 </head>
 
 <style id=default>
-    #test{
-        position:relative;
-        width:100px;
-        height:100px;
-        background-color:blue;
-    }
+#test{ position:absolute; width:100px; height:100px; top:200px; left:0px; background-color:blue;}
 #test2{
-    position:relative;
+    position:absolute;
     width:100px;
     height:100px;
+    top:100px;
+    left:0px;
+    z-index:0;
     background-color:red;
+}
+#test3{
+    position:absolute;
+    width:100px;
+    height:100px;
+    top:100px;
+    left:0px;
+    z-index:1;
+    background-color:green;
+    
 }
 </style>
 <style type="text/css" media="screen and (max-width:800px)">
@@ -34,6 +42,9 @@
 </div>
 <div id="test2" >
 <p> kiki </p>
+</div>
+<div id="test3">
+    <p>test3test3</p>
 </div>
 <!--
 <p>Click the button to wait 3 seconds, then alert "Hello".</p>

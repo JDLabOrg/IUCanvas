@@ -33,14 +33,14 @@
 - (IBAction)clickCSSBtn:(id)sender {
     if(self.cssSize != nil){
         NSInteger size =[self.cssSize integerValue];
-        [((CanvasWindowController *)self.mainWC) setIUStyle:self.cssStr withID:@"test2" size:size];
+        [((CanvasWindowController *)self.mainWC) setIUStyle:self.cssStr withID:@"test" size:size];
     }else{
-        [((CanvasWindowController *)self.mainWC) setIUStyle:self.cssStr withID:@"test2"];
+        [((CanvasWindowController *)self.mainWC) setIUStyle:self.cssStr withID:@"test"];
     }
 }
 
 - (IBAction)clickHTMLBtn:(id)sender {
-    [((CanvasWindowController *)self.mainWC) setIUInnerHTML:self.htmlStr withParentID:@"test2" tag:@"div"];
+    [((CanvasWindowController *)self.mainWC) setIUInnerHTML:self.htmlStr withParentID:@"test" tag:@"div"];
 }
 
 - (IBAction)clickRemoveHTMLBtn:(id)sender {

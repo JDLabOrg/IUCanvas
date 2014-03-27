@@ -34,6 +34,8 @@ $.fn.iuPosition = function(){
 	return { top: top, left: left, width: width, height: height }
 }
 
+/*
+
 $.fn.iuFrame = function(){
 	var parentWidth = parseFloat($(this).parent().css('width'));
 	var parentHeight = parseFloat($(this).parent().css('height'));
@@ -76,6 +78,8 @@ $.fn.iuFrame = function(){
     
 	return { top: top, left: left, width: width, height: height, marginLeft: marginLeft, marginTop: marginTop, percentTop : percentTop, percentLeft : percentLeft, percentWidth : percentWidth, percentHeight : percentHeight, percentMarginLeft : percentMarginLeft, percentMarginTop : percentMarginTop };
 }
+ 
+ */
 
 function getDictionaryKeys(dictionary){
     var keyArray = Object.keys(dictionary);
@@ -90,7 +94,6 @@ function getIUUpdatedFrameThread(){
         console.reportFrameDict(document.sharedFrameDict);
         document.sharedFrameDict = {};
     }
-    console.log("end : getIUUpdatedFrameThread");
 }
 
 function DoLogAction() {

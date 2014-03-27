@@ -14,5 +14,6 @@
 }
 
 - (NSString *)IDOfCurrentIU;
+- (void)updateFrameDict;
 
 @end

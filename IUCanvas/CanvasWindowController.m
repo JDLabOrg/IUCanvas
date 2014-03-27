@@ -8,6 +8,7 @@
 
 #import "CanvasWindowController.h"
 #import "CanvasWindow.h"
+#import "IULog.h"
 
 @interface CanvasWindowController ()
 
@@ -19,7 +20,8 @@
 {
     self = [super initWithWindow:window];
     if (self) {
-        // Initialization code here.
+        frameDict = [NSMutableDictionary dictionary];
+        selectedIUs = [NSMutableArray array];
     }
     return self;
 }
@@ -52,9 +54,15 @@
 #pragma mark manage IUs
 - (void)removeSelectedAllIUs{
     [selectedIUs removeAllObjects];
+    [[self gridView] removeAllRedPointLayer];
 }
 - (void)addSelectedIU:(NSString *)IU{
     [selectedIUs addObject:IU];
+    if([frameDict objectForKey:IU]){
+        NSRect frame = [[frameDict objectForKey:IU] rectValue];
+        [[self gridView] addRedPointLayer:IU withFrame:frame];
+    }
+
 }
 
 #pragma mark -
@@ -170,20 +178,53 @@
         [styleSheet deleteRule:(unsigned)index];
     }
     [styleSheet insertRule:rule index:0];
+    [[self webView] updateFrameDict];
+}
+
+#pragma mark -
+#pragma mark GridView
+- (GridView *)gridView{
+    return ((CanvasWindow *)self.window).gridView;
 }
 
 #pragma mark -
 #pragma mark frameDict
 
--(void)updateFrameDictionary:(NSMutableDictionary *)dict{
+-(void)updateFrameDictionary:(NSMutableDictionary *)updateDict{
+    IULog(@"report updated frame dict");
+    [[self gridView] updateLayerRect:updateDict];
     
-    NSArray *keys = [dict allKeys];
+    
+    NSArray *keys = [updateDict allKeys];
     for(NSString *key in keys){
         if([frameDict objectForKey:key]){
             [frameDict removeObjectForKey:key];
         }
-        [frameDict setObject:[dict objectForKey:key] forKey:key];
+        [frameDict setObject:[updateDict objectForKey:key] forKey:key];
     }
+}
+
+#pragma mark -
+#pragma mark updatedText
+- (void)updateHTMLText:(NSString *)insertText atIU:(NSString *)iuID{
+    
+    IULog(@"report updated HTMLText");
+}
+
+
+#pragma mark -
+#pragma mark border, ghost view
+- (void)setBorder:(BOOL)border{
+    [[self gridView] setBorder:border];
+}
+- (void)setGhost:(BOOL)ghost{
+    [[self gridView] setGhost:ghost];
+}
+- (void)setGhostImage:(NSImage *)ghostImage{
+    [[self gridView] setGhostImage:ghostImage];
+}
+- (void)setGhostPosition:(NSPoint)position{
+    [[self gridView] setGhostPosition:position];
 }
 
 @end

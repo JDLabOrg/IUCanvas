@@ -21,10 +21,15 @@
         [self setResourceLoadDelegate:self];
         [self setEditingDelegate:self];
         [self setFrameLoadDelegate:self];
+        [self setEditable:YES];
     }
     
     return self;
     
+}
+
+- (BOOL)isFlipped{
+    return YES;
 }
 
 #pragma mark -
@@ -38,6 +43,14 @@
 - (void)webView:(WebView *)sender mouseDidMoveOverElement:(NSDictionary *)elementInformation modifierFlags:(NSUInteger)modifierFlags{
     //whem mouse move, save current element!
     currentNode = [elementInformation objectForKey:WebElementDOMNodeKey];
+    
+    if([currentNode isKindOfClass:[DOMText class]]){
+        currentNode = [self textParentHTMLElement:currentNode];
+    }
+    
+    if(currentNode.idName){
+        IULog(@"%@", currentNode.idName);
+    }
 }
 
 
@@ -132,29 +145,82 @@
 
 
 - (void)reportFrameDict:(WebScriptObject *)scriptObj{
-    [((CanvasWindowController *)(self.window.delegate)) updateFrameDictionary:[self convertWebScriptObjectToNSDictionary:scriptObj]];
+    NSMutableDictionary *scriptDict = [self convertWebScriptObjectToNSDictionary:scriptObj];
+    NSMutableDictionary *frameDict = [NSMutableDictionary dictionary];
+    
+    NSArray *keys = [scriptDict allKeys];
+    for(NSString *key in keys){
+        NSDictionary *innerDict = [scriptDict objectForKey:key];
+        
+        CGFloat x = [[innerDict objectForKey:@"left"] floatValue];
+        CGFloat y = [[innerDict objectForKey:@"top"] floatValue];
+        CGFloat w = [[innerDict objectForKey:@"width"] floatValue];
+        CGFloat h = [[innerDict objectForKey:@"height"] floatValue];
+        
+        NSRect frame = NSMakeRect(x, y, w, h);
+        [frameDict setObject:[NSValue valueWithRect:frame] forKey:key];
+    }
+    
+    
+    [((CanvasWindowController *)(self.window.delegate)) updateFrameDictionary:frameDict];
     IULog(@"reportSharedFrameDict");
+}
+
+- (void)updateFrameDict{
+    //reportFrameDict(after call setIUCSSStyle)
+    [self stringByEvaluatingJavaScriptFromString:@"getIUUpdatedFrameThread()"];
 }
 
 
 #pragma mark -
 #pragma mark text
 
-//TODO: insert text => iu 에 현재 text information (text) html을 돌려줄것.
+- (DOMHTMLElement *)textParentHTMLElement:(DOMNode *)node{
+    //find first div element node
+    if ([node.parentNode isKindOfClass:[DOMHTMLDivElement class]] ){
+        return (DOMHTMLElement *)node.parentNode;
+    }
+    else if ([node.parentNode isKindOfClass:[DOMHTMLHtmlElement class]] ){
+        //can't find div node
+        //- it can't be in IU model
+        //- IU model : text always have to be in Div class
+        //reach to html
+        assert(1);
+        return nil;
+    }
+    else {
+        return [self textParentHTMLElement:node.parentNode];
+    }
+}
+
 - (BOOL)webView:(WebView *)webView shouldInsertText:(NSString *)text replacingDOMRange:(DOMRange *)range givenAction:(WebViewInsertAction)action{
     
     NSLog(@"insert Text : %@", text);
+    DOMHTMLElement *insertedTextNode = [self textParentHTMLElement:range.startContainer];
     
-    return YES;
+    if(insertedTextNode != nil){
+        [((CanvasWindowController *)(self.window.delegate)) updateHTMLText:insertedTextNode.innerHTML atIU:insertedTextNode.idName];
+        return YES;
+    }
+    else {
+        return NO;
+    }
+}
+- (BOOL)webView:(WebView *)webView shouldApplyStyle:(DOMCSSStyleDeclaration *)style toElementsInDOMRange:(DOMRange *)range{
+    
+    
+    NSLog(@"insert CSS : %@", style.cssText);
+    DOMHTMLElement *insertedTextNode = [self textParentHTMLElement:range.startContainer];
+    
+    if(insertedTextNode != nil){
+        [((CanvasWindowController *)(self.window.delegate)) updateHTMLText:insertedTextNode.innerHTML atIU:insertedTextNode.idName];
+        return YES;
+    }
+    else {
+        return NO;
+    }
 }
 
-- (void)webViewDidEndEditing:(NSNotification *)notification{
-    
-}
-
-- (void)webViewDidChange:(NSNotification *)notification{
-    NSLog(@"didChangeNotification");
-}
 
 #pragma mark -
 #pragma mark manage IU
@@ -166,11 +232,5 @@
 }
 
 
-#pragma mark -
-#pragma mark manage CSS
-
-
-#pragma mark -
-#pragma mark manage HTML
 
 @end

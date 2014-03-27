@@ -10,6 +10,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <QuartzCore/QuartzCore.h>
 
 NSPoint NSPointWithInt(NSPoint p);
 NSPoint NSPointMake(CGFloat x, CGFloat y);
@@ -59,6 +60,11 @@ BOOL   isNSRectContainsRect(NSRect rect, NSRect subrect);
 -(void)removeAllSubview;
 @end
 
+@interface CALayer(JDExtension)
+-(id)addSubLayerFullFrame:(CALayer *)sublayer;
+-(id)insertSubLayerFullFrame:(CALayer *)sublayer below:(CALayer *)belowLayer;
+
+@end
 @interface NSImageView(JDExtension)
 -(id)addSubviewWithTopLeftFixed:(NSView*)subview;
 @end

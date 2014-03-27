@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3DC2C1A918E16341000B6E6F /* PointLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DC2C1A818E16341000B6E6F /* PointLayer.m */; };
+		3DC2C1B018E2B2D3000B6E6F /* CursorRect.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DC2C1AF18E2B2D3000B6E6F /* CursorRect.m */; };
+		3DC2C1B518E2B721000B6E6F /* ResizeNE-SW.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 3DC2C1B318E2B721000B6E6F /* ResizeNE-SW.tiff */; };
+		3DC2C1B618E2B721000B6E6F /* ResizeNW-SE.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 3DC2C1B418E2B721000B6E6F /* ResizeNW-SE.tiff */; };
+		3DC2C1BA18E2BD31000B6E6F /* BorderLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DC2C1B918E2BD31000B6E6F /* BorderLayer.m */; };
+		3DC2C1BD18E3ECE8000B6E6F /* PointTextLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DC2C1BC18E3ECE8000B6E6F /* PointTextLayer.m */; };
 		3DE2257018DC44F300190847 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DE2256F18DC44F300190847 /* Cocoa.framework */; };
 		3DE2257A18DC44F300190847 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3DE2257818DC44F300190847 /* InfoPlist.strings */; };
 		3DE2257C18DC44F300190847 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DE2257B18DC44F300190847 /* main.m */; };
@@ -43,6 +49,16 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3DC2C1A718E16341000B6E6F /* PointLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PointLayer.h; sourceTree = "<group>"; };
+		3DC2C1A818E16341000B6E6F /* PointLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PointLayer.m; sourceTree = "<group>"; };
+		3DC2C1AE18E2B2D3000B6E6F /* CursorRect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CursorRect.h; sourceTree = "<group>"; };
+		3DC2C1AF18E2B2D3000B6E6F /* CursorRect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CursorRect.m; sourceTree = "<group>"; };
+		3DC2C1B318E2B721000B6E6F /* ResizeNE-SW.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = "ResizeNE-SW.tiff"; sourceTree = "<group>"; };
+		3DC2C1B418E2B721000B6E6F /* ResizeNW-SE.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = "ResizeNW-SE.tiff"; sourceTree = "<group>"; };
+		3DC2C1B818E2BD31000B6E6F /* BorderLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BorderLayer.h; sourceTree = "<group>"; };
+		3DC2C1B918E2BD31000B6E6F /* BorderLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BorderLayer.m; sourceTree = "<group>"; };
+		3DC2C1BB18E3ECE8000B6E6F /* PointTextLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PointTextLayer.h; sourceTree = "<group>"; };
+		3DC2C1BC18E3ECE8000B6E6F /* PointTextLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PointTextLayer.m; sourceTree = "<group>"; };
 		3DE2256C18DC44F300190847 /* IUCanvas.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IUCanvas.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3DE2256F18DC44F300190847 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		3DE2257218DC44F300190847 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -108,11 +124,42 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3DC2C1A618E162F9000B6E6F /* GridLayers */ = {
+			isa = PBXGroup;
+			children = (
+				3DC2C1A718E16341000B6E6F /* PointLayer.h */,
+				3DC2C1A818E16341000B6E6F /* PointLayer.m */,
+				3DC2C1B818E2BD31000B6E6F /* BorderLayer.h */,
+				3DC2C1B918E2BD31000B6E6F /* BorderLayer.m */,
+				3DC2C1BB18E3ECE8000B6E6F /* PointTextLayer.h */,
+				3DC2C1BC18E3ECE8000B6E6F /* PointTextLayer.m */,
+			);
+			name = GridLayers;
+			sourceTree = "<group>";
+		};
+		3DC2C1B118E2B6F6000B6E6F /* Resource */ = {
+			isa = PBXGroup;
+			children = (
+				3DC2C1B218E2B709000B6E6F /* Image */,
+				3DE225D418E0204000190847 /* htdocs */,
+			);
+			name = Resource;
+			sourceTree = "<group>";
+		};
+		3DC2C1B218E2B709000B6E6F /* Image */ = {
+			isa = PBXGroup;
+			children = (
+				3DC2C1B318E2B721000B6E6F /* ResizeNE-SW.tiff */,
+				3DC2C1B418E2B721000B6E6F /* ResizeNW-SE.tiff */,
+			);
+			name = Image;
+			sourceTree = "<group>";
+		};
 		3DE2256318DC44F300190847 = {
 			isa = PBXGroup;
 			children = (
-				3DE225D418E0204000190847 /* htdocs */,
-				3DE225B818DFD23900190847 /* JD */,
+				3DC2C1B118E2B6F6000B6E6F /* Resource */,
+				3DE225B818DFD23900190847 /* CustomLib */,
 				3DE2257518DC44F300190847 /* IUCanvas */,
 				3DE2259318DC44F300190847 /* IUCanvasTests */,
 				3DE2256E18DC44F300190847 /* Frameworks */,
@@ -154,6 +201,9 @@
 		3DE2257518DC44F300190847 /* IUCanvas */ = {
 			isa = PBXGroup;
 			children = (
+				3DC2C1AE18E2B2D3000B6E6F /* CursorRect.h */,
+				3DC2C1AF18E2B2D3000B6E6F /* CursorRect.m */,
+				3DC2C1A618E162F9000B6E6F /* GridLayers */,
 				3DE2258118DC44F300190847 /* AppDelegate.h */,
 				3DE2258218DC44F300190847 /* AppDelegate.m */,
 				3DE2258418DC44F300190847 /* MainMenu.xib */,
@@ -205,7 +255,7 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		3DE225B818DFD23900190847 /* JD */ = {
+		3DE225B818DFD23900190847 /* CustomLib */ = {
 			isa = PBXGroup;
 			children = (
 				3DE225B518DFCF1000190847 /* IULog.h */,
@@ -214,7 +264,7 @@
 				3DE225B918DFD27E00190847 /* JDUIUtil.h */,
 				3DE225BA18DFD27E00190847 /* JDUIUtil.m */,
 			);
-			name = JD;
+			name = CustomLib;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -293,9 +343,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3DC2C1B618E2B721000B6E6F /* ResizeNW-SE.tiff in Resources */,
 				3DE225CC18E0167300190847 /* MainMenu.xib in Resources */,
 				3DE225DA18E03D3F00190847 /* TestController.xib in Resources */,
 				3DE2257A18DC44F300190847 /* InfoPlist.strings in Resources */,
+				3DC2C1B518E2B721000B6E6F /* ResizeNE-SW.tiff in Resources */,
 				3DE225C518DFEB9F00190847 /* CanvasWindowController.xib in Resources */,
 				3DE225D518E0204000190847 /* htdocs in Resources */,
 				3DE2258818DC44F300190847 /* Images.xcassets in Resources */,
@@ -321,8 +373,12 @@
 				3DE225C418DFEB9F00190847 /* CanvasWindowController.m in Sources */,
 				3DE225BE18DFD29800190847 /* JDDataStructUtil.m in Sources */,
 				3DE2258318DC44F300190847 /* AppDelegate.m in Sources */,
+				3DC2C1BA18E2BD31000B6E6F /* BorderLayer.m in Sources */,
+				3DC2C1B018E2B2D3000B6E6F /* CursorRect.m in Sources */,
 				3DE225C818DFEBC000190847 /* CanvasWindow.m in Sources */,
+				3DC2C1A918E16341000B6E6F /* PointLayer.m in Sources */,
 				3DE2257C18DC44F300190847 /* main.m in Sources */,
+				3DC2C1BD18E3ECE8000B6E6F /* PointTextLayer.m in Sources */,
 				3DE225BB18DFD27E00190847 /* JDUIUtil.m in Sources */,
 				3DE225AD18DC46ED00190847 /* WebCanvasView.m in Sources */,
 				3DE225D918E03D3F00190847 /* TestController.m in Sources */,
@@ -538,6 +594,7 @@
 				3DE2259F18DC44F300190847 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		3DE225A018DC44F300190847 /* Build configuration list for PBXNativeTarget "IUCanvasTests" */ = {
 			isa = XCConfigurationList;
@@ -546,6 +603,7 @@
 				3DE225A218DC44F300190847 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

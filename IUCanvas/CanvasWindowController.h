@@ -14,6 +14,8 @@
     NSMutableDictionary *frameDict;
 }
 
+#pragma mark -
+#pragma mark be set by IU
 
 //load page
 - (void)loadRequest:(NSURLRequest *)request;
@@ -34,6 +36,18 @@
 - (void)setIUInnerHTML:(NSString *)HTML withParentID:(NSString *)parentID tag:(NSString *)tag;
 - (void)removeIU:(NSString *)iuID;
 
-- (void)updateFrameDictionary:(NSMutableDictionary *)dict;
+//border, ghost view
+- (void)setBorder:(BOOL)border;
+- (void)setGhost:(BOOL)ghost;
+- (void)setGhostImage:(NSImage *)ghostImage;
+- (void)setGhostPosition:(NSPoint)position;
+
+#pragma mark -
+#pragma mark setIU
+//TODO: connect to IU - set value to IU
+- (void)updateFrameDictionary:(NSMutableDictionary *)updateDict;
+- (void)updateHTMLText:(NSString *)insertText atIU:(NSString *)iuID;
+
+
 
 @end
