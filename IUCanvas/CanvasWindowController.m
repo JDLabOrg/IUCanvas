@@ -10,7 +10,8 @@
 #import "CanvasWindow.h"
 #import "IULog.h"
 
-@interface CanvasWindowController ()
+@interface CanvasWindowController (){
+}
 
 @end
 
@@ -52,17 +53,39 @@
 
 #pragma mark -
 #pragma mark manage IUs
+- (BOOL)containsIU:(NSString *)IU{
+    if ([selectedIUs containsObject:IU]){
+        return YES;
+    }
+    else {
+        return NO;
+    }
+}
 - (void)removeSelectedAllIUs{
     [selectedIUs removeAllObjects];
     [[self gridView] removeAllRedPointLayer];
+    [[self gridView] removeAllTextPointLayer];
 }
 - (void)addSelectedIU:(NSString *)IU{
     [selectedIUs addObject:IU];
     if([frameDict objectForKey:IU]){
         NSRect frame = [[frameDict objectForKey:IU] rectValue];
         [[self gridView] addRedPointLayer:IU withFrame:frame];
+        [[self gridView] addTextPointLayer:IU withFrame:frame];
     }
+}
 
+- (void)selectIUInRect:(NSRect)frame{
+    NSArray *keys = [frameDict allKeys];
+    
+    [self removeSelectedAllIUs];
+    
+    for(NSString *key in keys){
+        NSRect iuframe = [[frameDict objectForKey:key] rectValue];
+        if( NSIntersectsRect(iuframe, frame) ){
+            [self addSelectedIU:key];
+        }
+    }
 }
 
 #pragma mark -
@@ -187,30 +210,6 @@
     return ((CanvasWindow *)self.window).gridView;
 }
 
-#pragma mark -
-#pragma mark frameDict
-
--(void)updateFrameDictionary:(NSMutableDictionary *)updateDict{
-    IULog(@"report updated frame dict");
-    [[self gridView] updateLayerRect:updateDict];
-    
-    
-    NSArray *keys = [updateDict allKeys];
-    for(NSString *key in keys){
-        if([frameDict objectForKey:key]){
-            [frameDict removeObjectForKey:key];
-        }
-        [frameDict setObject:[updateDict objectForKey:key] forKey:key];
-    }
-}
-
-#pragma mark -
-#pragma mark updatedText
-- (void)updateHTMLText:(NSString *)insertText atIU:(NSString *)iuID{
-    
-    IULog(@"report updated HTMLText");
-}
-
 
 #pragma mark -
 #pragma mark border, ghost view
@@ -226,5 +225,54 @@
 - (void)setGhostPosition:(NSPoint)position{
     [[self gridView] setGhostPosition:position];
 }
+
+/*
+ ******************************************************************************************
+ SET IU : View call IU
+ ******************************************************************************************
+ */
+#pragma mark -
+#pragma mark setIU
+
+#pragma mark frameDict
+
+- (void)updateIUFrameDictionary:(NSMutableDictionary *)iuFrameDict{
+    IULog(@"report updated frame dict");
+    
+    
+    //TODO: updated frame dict to IU
+}
+
+- (void)updateGridFrameDictionary:(NSMutableDictionary *)gridFrameDict{
+    
+    [[self gridView] updateLayerRect:gridFrameDict];
+    
+    
+    NSArray *keys = [gridFrameDict allKeys];
+    for(NSString *key in keys){
+        if([frameDict objectForKey:key]){
+            [frameDict removeObjectForKey:key];
+        }
+        [frameDict setObject:[gridFrameDict objectForKey:key] forKey:key];
+    }
+}
+
+#pragma mark updatedText
+- (void)updateHTMLText:(NSString *)insertText atIU:(NSString *)iuID{
+    
+    IULog(@"[IU:%@], %@", iuID, insertText);
+}
+
+#pragma mark moveIU
+- (void)moveDiffPoint:(NSPoint)point{
+    
+    IULog(@"Point:(%.1f %.1f)", point.x, point.y);
+}
+- (void)changeIUFrame:(NSRect)frame IUID:(NSString *)IUID{
+    
+    IULog(@"[IU:%@]\n origin: (%.1f, %.1f) \n size: (%.1f, %.1f)",
+          IUID, frame.origin.x, frame.origin.y, frame.size.width, frame.size.height);
+}
+
 
 @end

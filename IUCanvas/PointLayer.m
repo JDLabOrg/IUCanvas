@@ -9,6 +9,7 @@
 #import "PointLayer.h"
 #import "IULog.h"
 #import "CursorRect.h"
+#import "JDUIUtil.h"
 
 @implementation InnerPointLayer
 
@@ -22,22 +23,14 @@
         self.borderColor = [[NSColor blackColor] CGColor];
         self.borderWidth = 1.0f;
         
-        
-        /*disable animation*/
-        /*sublayer disable animation*/
-        NSMutableDictionary *newActions = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
-                                           [NSNull null], @"position",
-                                           [NSNull null], @"bounds",
-                                           nil];
-        self.actions = newActions;
+        [self disableAction];
 
     }
     return self;
 }
 
 -(CALayer *)hitTest:(CGPoint)p{
-    CGPoint convertedPoint = [self convertPoint:p fromLayer:self.superlayer];
-    if ([self containsPoint:convertedPoint]){
+    if (NSPointInRect(p, self.frame)){
         return self;
     }
     return nil;
@@ -65,14 +58,7 @@
             InnerPointLayer *newInnerLayer = [[InnerPointLayer alloc] initWithType:(IUPointLayerPosition)i frame:innerFrame];
             [self addSublayer:newInnerLayer];
         }
-        
-        /*disable animation*/
-        /*sublayer disable animation*/
-        NSMutableDictionary *newActions = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
-                                           [NSNull null], @"position",
-                                           [NSNull null], @"bounds",
-                                           nil];
-        self.actions = newActions;
+        [self disableAction];
 
     }
     return self;
@@ -80,17 +66,16 @@
 
 
 - (CALayer *)hitTest:(CGPoint)p{
-    CGPoint convertedPoint = [self convertPoint:p fromLayer:self.superlayer];
-    CALayer *hitLayer = [super hitTest:convertedPoint];
-    return hitLayer;
+    CGPoint convertedPoint = [self convertPoint:p fromLayer:nil];
+    return [super hitTest:convertedPoint];
 }
-
 - (void)updateFrame:(NSRect)frame{
     iuFrame = frame;
     for(InnerPointLayer *layer in self.sublayers){
         NSRect innerFrame = [self makeInnerFrameWithType:[layer type]];
         [layer updatedFrame:innerFrame];
     }
+    [self setNeedsDisplay];
 }
 
 - (NSRect)makeNewFrameWithType:(IUPointLayerPosition)type withDiffPoint:(NSPoint)diffPoint{

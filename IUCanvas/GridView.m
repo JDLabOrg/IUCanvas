@@ -12,6 +12,8 @@
 #import "IULog.h"
 #import "CursorRect.h"
 #import "JDUIUtil.h"
+#import "PointTextLayer.h"
+#import "CanvasWindowController.h"
 
 
 @implementation GridView
@@ -23,31 +25,39 @@
         [self setLayer:[[CALayer alloc] init]];
         [self setWantsLayer:YES];
         [self.layer setBackgroundColor:[[NSColor clearColor] CGColor]];
-        [self disableLayerAnimation:self.layer];
+        [self.layer disableAction];
+
         
         //iniialize point Manager
         pointManagerLayer = [CALayer layer];
-        pointManagerLayer.contentsGravity = kCAGravityTopLeft;
-        
-        
-        [self disableLayerAnimation:pointManagerLayer];
+        [pointManagerLayer disableAction];
         [self.layer addSubLayerFullFrame:pointManagerLayer];
 
-
+        
+        //initialize textPoint Manager
+        textManageLayer = [CALayer layer];
+        [textManageLayer disableAction];
+        [self.layer insertSubLayerFullFrame:textManageLayer below:pointManagerLayer];
+        
         //initialize border manager
         borderManagerLayer = [CALayer layer];
-        borderManagerLayer.contentsGravity = kCAGravityTopLeft;
-        
-        [self disableLayerAnimation:borderManagerLayer];
-        [self.layer insertSubLayerFullFrame:borderManagerLayer below:pointManagerLayer];
+        [borderManagerLayer disableAction];
+        [self.layer insertSubLayerFullFrame:borderManagerLayer below:textManageLayer];
         
         //initialize ghost Layer
         ghostLayer = [CALayer layer];
-        ghostLayer.contentsGravity = kCAGravityTopLeft;
         [ghostLayer setBackgroundColor:[[NSColor clearColor] CGColor]];
         [ghostLayer setOpacity:0.3];
-        [self disableLayerAnimation:ghostLayer];
+        [ghostLayer disableAction];
         [self.layer insertSubLayerFullFrame:ghostLayer below:borderManagerLayer];
+        
+        //initialize selection Layer
+        selectionLayer = [CALayer layer];
+        [selectionLayer setBackgroundColor:[[NSColor clearColor] CGColor]];
+        [selectionLayer setBorderColor:[[NSColor gridColor] CGColor]];
+        [selectionLayer setBorderWidth:1.0];
+        [selectionLayer disableAction];
+        [self.layer insertSublayer:selectionLayer below:pointManagerLayer];
         
     }
     return self;
@@ -56,18 +66,6 @@
 
 - (BOOL)isFlipped{
     return YES;
-}
-
-- (void)disableLayerAnimation:(CALayer *)layer{
-    /*disable animation*/
-    /*sublayer disable animation*/
-    NSMutableDictionary *newActions = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
-                                       [NSNull null], @"position",
-                                       [NSNull null], @"bounds",
-                                       [NSNull null], @"sublayers",
-                                       [NSNull null], @"contents",
-                                       nil];
-    layer.actions = newActions;
 }
 
 - (void)viewDidChangeBackingProperties{
@@ -79,7 +77,7 @@
 #pragma mark mouse operation
 
 - (NSView *)hitTest:(NSPoint)aPoint{
-    NSPoint convertedPoint = [self convertPoint:aPoint fromView:self.superview];
+    NSPoint convertedPoint = [self convertPoint:aPoint fromView:nil];
     CALayer *hitLayer = [self hitTestInnerPointLayer:convertedPoint];
     if( hitLayer ){
         return self;
@@ -97,7 +95,7 @@
 
 - (void)mouseDown:(NSEvent *)theEvent{
     isClicked = YES;
-    NSPoint convertedPoint = [self convertPoint:[theEvent locationInWindow] fromView:self.superview];
+    NSPoint convertedPoint = [self convertPoint:[theEvent locationInWindow] fromView:nil];
     InnerPointLayer *hitPointLayer = [self hitTestInnerPointLayer:convertedPoint];
     selectedPointlayer = (PointLayer *)hitPointLayer.superlayer;
     selectedPointType = [hitPointLayer type];
@@ -108,14 +106,18 @@
 - (void)mouseDragged:(NSEvent *)theEvent{
     if(isClicked){
         isDragged = YES;
-        NSPoint convertedPoint = [self convertPoint:[theEvent locationInWindow] fromView:self.superview];
+        NSPoint convertedPoint = [self convertPoint:[theEvent locationInWindow] fromView:nil];
         NSPoint diffPoint = NSMakePoint(convertedPoint.x-startPoint.x, convertedPoint.y-startPoint.y);
         startPoint = convertedPoint;
         
         NSRect newframe = [selectedPointlayer makeNewFrameWithType:selectedPointType withDiffPoint:diffPoint];
+        [((CanvasWindowController *)(self.window.delegate)) changeIUFrame:newframe IUID:selectedPointlayer.iuID];
+
         //FIXME: temporarly 연결되면 updated frame으로 webkit에서 받아서 사용함
-        //테스트용도로 우선 업데이트함
+        //테스트용도로 우선 업데이트함-나중에 지울것
+        //updateFrame은 무조건 dict에서 오는것으로만함!
         [selectedPointlayer updateFrame:newframe];
+        
         //reset cursor
         [[self window] invalidateCursorRectsForView:self];
 
@@ -150,56 +152,37 @@
 #pragma mark -
 #pragma mark selectIU
 
-- (void)removeAllRedPointLayer{
-    //delete current layer
-    for(CALayer *layer in pointManagerLayer.sublayers){
-        [layer removeFromSuperlayer];
-    }
-    
-    //reset cursor
-    [[self window] invalidateCursorRectsForView:self];
-    
-}
-
-- (void)addRedPointLayer:(NSString *)iuID withFrame:(NSRect)frame{
-    PointLayer *pointLayer = [[PointLayer alloc] initWithIUID:iuID withFrame:frame];
-    [pointManagerLayer addSubLayerFullFrame:pointLayer];
-    
-    //reset cursor
-    [[self window] invalidateCursorRectsForView:self];
-    
-}
-
-//dict[IUID] = frame
-- (void)makeRedPointLayer:(NSDictionary *)selectedIUDict{
-    
-    [self removeAllRedPointLayer];
-   
-    NSArray *keys = [selectedIUDict allKeys];
-    //add new selected layer
-    for(NSString *iuID in keys){
-        NSRect frame = [[selectedIUDict objectForKey:iuID] rectValue];
-        [self addRedPointLayer:iuID withFrame:frame];
-    }
-    
-}
-
-
 - (void)updateLayerRect:(NSMutableDictionary *)frameDict{
     //framedict가 update될때마다 호출
-
+    
     //pointLayer
     for(PointLayer *pLayer in pointManagerLayer.sublayers){
-        NSRect currentRect = [[frameDict objectForKey:pLayer.iuID] rectValue];
-        [pLayer updateFrame:currentRect];
+        NSValue *value = [frameDict objectForKey:pLayer.iuID];
+        if(value){
+            NSRect currentRect = [value rectValue];
+            [pLayer updateFrame:currentRect];
+        }
     }
     
+    //textLayer update
+    for(PointTextLayer *tLayer in textManageLayer.sublayers){
+        NSValue *value = [frameDict objectForKey:tLayer.iuID];
+        if(value){
+            NSRect currentRect = [value rectValue];
+            [tLayer updateFrame:currentRect];
+        }
+    }
+    
+    //-----------------bound layer---------------------------
     //updated bound layer if already have
     NSMutableDictionary *borderDict = [frameDict mutableCopy];
     for(BorderLayer *bLayer in borderManagerLayer.sublayers){
         NSString *iuID = bLayer.iuID;
-        NSRect currentRect =[[borderDict objectForKey:iuID] rectValue];
-        [bLayer setFrame:currentRect];
+        NSValue *value = [borderDict objectForKey:iuID];
+        if(value){
+            NSRect currentRect =[value rectValue];
+            [bLayer setFrame:currentRect];
+        }
         [borderDict removeObjectForKey:iuID];
     }
     //make new bound layer if doesn't have
@@ -212,8 +195,105 @@
     
     //reset cursor
     [[self window] invalidateCursorRectsForView:self];
+    
+}
+
+#pragma mark red Point layer
+
+- (void)addRedPointLayer:(NSString *)iuID withFrame:(NSRect)frame{
+    PointLayer *pointLayer = [[PointLayer alloc] initWithIUID:iuID withFrame:frame];
+    [pointManagerLayer addSubLayerFullFrame:pointLayer];
+    
+    //reset cursor
+    [[self window] invalidateCursorRectsForView:self];
+    
+}
+
+- (void)removeAllRedPointLayer{
+    //delete current layer
+    NSArray *pointLayers = [NSArray arrayWithArray:pointManagerLayer.sublayers];
+
+    for(CALayer *layer in pointLayers){
+        [layer removeFromSuperlayer];
+    }
+    
+    //reset cursor
+    [[self window] invalidateCursorRectsForView:self];
+    
+}
+
+//dict[IUID] = frame
+- (void)makeRedPointLayer:(NSDictionary *)selectedIUDict{
+    
+    [self removeAllRedPointLayer];
+    
+    NSArray *keys = [selectedIUDict allKeys];
+    //add new selected layer
+    for(NSString *iuID in keys){
+        NSRect frame = [[selectedIUDict objectForKey:iuID] rectValue];
+        [self addRedPointLayer:iuID withFrame:frame];
+    }
+    
+}
+
+#pragma mark text layer
+
+- (void)addTextPointLayer:(NSString *)iuID withFrame:(NSRect)frame{
+    PointTextLayer *textOriginLayer = [[PointTextLayer alloc] initWithIUID:iuID withFrame:frame type:PointTextTypeOrigin];
+    PointTextLayer *textSizeLayer = [[PointTextLayer alloc] initWithIUID:iuID withFrame:frame type:PointTextTypeSize];
+    
+    [textManageLayer addSublayer:textOriginLayer];
+    [textManageLayer addSublayer:textSizeLayer];
 
 }
+
+- (void)removeAllTextPointLayer{
+    //delete current layer
+    NSArray *textLayers = [NSArray arrayWithArray:textManageLayer.sublayers];
+    for(CALayer *layer in textLayers){
+        [layer removeFromSuperlayer];
+    }
+    
+}
+
+#pragma mark selection layer
+-(void)drawSelectionLayer:(NSRect)frame{
+    [selectionLayer setHidden:NO];
+    [selectionLayer setFrame:frame];
+    /*
+    NSBezierPath *path = [NSBezierPath bezierPath];
+    
+    NSPoint start, end;
+    CGFloat x = floor(frame.origin.x);
+    CGFloat y = floor(frame.origin.y);
+    CGFloat w = floor(frame.size.width);
+    CGFloat h = floor(frame.size.height);
+    
+    
+    start = NSMakePoint(x, y);
+    end = NSMakePoint(x, y+h);
+    [path drawline:start end:end];
+    
+    end = NSMakePoint(x+w, y);
+    [path drawline:start end:end];
+    
+    start = NSMakePoint(x+w, y);
+    end = NSMakePoint(x+w, y+h);
+    [path drawline:start end:end];
+    
+    start = NSMakePoint(x, y+h);
+    end = NSMakePoint(x+w, y+h);
+    [path drawline:start end:end];
+    
+    selectionLayer.path = [path quartzPath];
+     */
+}
+
+- (void)resetSelectionLayer{
+    [selectionLayer setHidden:YES];
+    [selectionLayer setFrame:NSZeroRect];
+}
+
 
 #pragma mark -
 #pragma mark ghostImage, border

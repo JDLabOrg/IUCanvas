@@ -11,8 +11,8 @@
 #import "GridView.h"
 
 @interface CanvasWindow : NSWindow{
-    BOOL isSelected, isDragged;
-    NSPoint startDragPoint, endDragPoint;
+    BOOL isSelected, isDragged, isSelectDragged;
+    NSPoint startDragPoint, middleDragPoint, endDragPoint;
 }
 
 @property WebCanvasView *webView;

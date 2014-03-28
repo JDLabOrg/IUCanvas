@@ -9,20 +9,18 @@
 #test{ position:absolute; width:100px; height:100px; top:200px; left:0px; background-color:blue;}
 #test2{
     position:absolute;
-    width:100px;
+    width:200px;
     height:100px;
     top:100px;
-    left:0px;
-    z-index:0;
+    left:50px;
     background-color:red;
 }
-#test3{
+#innerDiv{
     position:absolute;
     width:100px;
     height:100px;
-    top:100px;
+    top:0px;
     left:0px;
-    z-index:1;
     background-color:green;
     
 }
@@ -34,17 +32,15 @@
         background-color:red;
     }
     </style>
-<body>
+<body class='IUObj' id="body" IUName="body">
 
-<div id="test">
+<div class='IUObj' id="test" IUName="test">
 <p>hehehehe</p>
 <p>hahaha</p>
 </div>
-<div id="test2" >
-<p> kiki </p>
-</div>
-<div id="test3">
-    <p>test3test3</p>
+<div class='IUObj' id="test2" IUName="test2">
+    <div class='IUObj' id="innerDiv" IUName="innerDiv">
+    </div>
 </div>
 <!--
 <p>Click the button to wait 3 seconds, then alert "Hello".</p>

@@ -9,7 +9,7 @@
 #import <Cocoa/Cocoa.h>
 #import "WebCanvasView.h"
 
-@interface CanvasWindowController : NSWindowController{
+@interface CanvasWindowController : NSWindowController  <NSWindowDelegate>{
     NSMutableArray *selectedIUs;
     NSMutableDictionary *frameDict;
 }
@@ -22,8 +22,10 @@
 - (void)loadHTMLString:(NSString *)htmlString baseURL:(NSURL *)URL;
 
 //select IUs
+- (BOOL)containsIU:(NSString *)IU;
 - (void)removeSelectedAllIUs;
 - (void)addSelectedIU:(NSString *)IU;
+- (void)selectIUInRect:(NSRect)frame;
 
 //set css
 /*
@@ -45,9 +47,13 @@
 #pragma mark -
 #pragma mark setIU
 //TODO: connect to IU - set value to IU
-- (void)updateFrameDictionary:(NSMutableDictionary *)updateDict;
+- (void)updateIUFrameDictionary:(NSMutableDictionary *)iuFrameDict;
+- (void)updateGridFrameDictionary:(NSMutableDictionary *)gridFrameDict;
+
 - (void)updateHTMLText:(NSString *)insertText atIU:(NSString *)iuID;
 
+- (void)moveDiffPoint:(NSPoint)point;
+- (void)changeIUFrame:(NSRect)frame IUID:(NSString *)IUID;
 
 
 @end

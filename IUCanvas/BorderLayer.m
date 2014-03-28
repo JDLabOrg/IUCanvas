@@ -7,7 +7,7 @@
 //
 
 #import "BorderLayer.h"
-
+#import "JDUIUtil.h"
 @implementation BorderLayer
 
 - (id)initWithIUID:(NSString *)aIUID withFrame:(NSRect)frame{
@@ -19,14 +19,7 @@
         
         [self setBorderColor:[[NSColor gridColor] CGColor]];
         [self setBorderWidth:3.0f];
-        
-        /*disable animation*/
-        /*sublayer disable animation*/
-        NSMutableDictionary *newActions = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
-                                           [NSNull null], @"position",
-                                           [NSNull null], @"bounds",
-                                           nil];
-        self.actions = newActions;
+        [self disableAction];
         
     }
     return self;

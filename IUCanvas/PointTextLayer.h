@@ -8,9 +8,20 @@
 
 #import <QuartzCore/QuartzCore.h>
 
-#define kPointTextOrigin    1
-#define kPointTextSize      2
+typedef enum{
+    PointTextTypeOrigin,
+    PointTextTypeSize,
+}PointTextType;
 
-@interface PointTextLayer : CATextLayer
+@interface PointTextLayer : CATextLayer{
+    PointTextType type;
+    NSString *IUID;
+    NSRect iuFrame;
+}
+
+- (id)initWithIUID:(NSString *)aIUID withFrame:(NSRect)frame type:(PointTextType)aType;
+- (void)updateFrame:(NSRect)frame;
+- (NSString *)iuID;
+
 
 @end

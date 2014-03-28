@@ -2,12 +2,11 @@ document.sharedFrameDict = {};
 
 $.fn.updatePixel = function(){
 	return this.each(function(){
-
-                     var myName = this.id;
+                     var myName = $(this).attr('iuname');
                      if (this.position == undefined){
                      this.position = $(this).iuPosition();
                      if (document.sharedFrameDict[myName] == undefined){
-                     document.sharedFrameDict[myName] = this.position;
+                        document.sharedFrameDict[myName] = this.position;
                      }
                      }
                      else{
@@ -31,7 +30,10 @@ $.fn.iuPosition = function(){
 		var marginLeft = parseFloat($(this).css('margin-left'));
 		return { top: top, left: left, width: width, height: height, marginTop:marginTop, marginLeft:marginLeft }
 	}
-	return { top: top, left: left, width: width, height: height }
+    var x = $(this).offset().left;
+    var y = $(this).offset().top;
+    
+	return { top: top, left: left, width: width, height: height, x:x, y:y }
 }
 
 /*
@@ -87,10 +89,10 @@ function getDictionaryKeys(dictionary){
 }
 
 function getIUUpdatedFrameThread(){
-    //TODO:  IUObj Select하는 것으로 바꾸기
-    $('div').updatePixel();
+    $('.IUObj').updatePixel();
     
-    if (Object.keys(document.sharedFrameDict).length > 0){
+    if (Object.keys(document.sharedFrameDict).length > 0
+        && console.reportFrameDict ){
         console.reportFrameDict(document.sharedFrameDict);
         document.sharedFrameDict = {};
     }
@@ -105,6 +107,7 @@ function DoLogAction() {
 
 $(document).ready(function(){
             console.log("ready");
+            getIUUpdatedFrameThread();
             setInterval(function(){
                               getIUUpdatedFrameThread();
                               }, 3000);

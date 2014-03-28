@@ -25,7 +25,7 @@
     
 #pragma mark -
 #pragma mark canvas test
-#if 1
+#if 0
     self.testController = [[TestController alloc] initWithWindowNibName:@"TestController"];
     self.testController.mainWC = self.canvasWC;
     [self.testController showWindow:nil];

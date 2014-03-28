@@ -10,8 +10,9 @@
 #import "PointLayer.h"
 
 @interface GridView : NSView{
-    CALayer *ghostLayer, *borderManagerLayer, *shadowManagerLayer;
+    CALayer *ghostLayer, *borderManagerLayer;
     CALayer *textManageLayer, *pointManagerLayer;
+    CALayer *selectionLayer;
     
     //for dragging - change width, height ofIU
     BOOL isClicked, isDragged;
@@ -25,6 +26,12 @@
 
 - (void)addRedPointLayer:(NSString *)iuID withFrame:(NSRect)frame;
 - (void)removeAllRedPointLayer;
+
+- (void)addTextPointLayer:(NSString *)iuID withFrame:(NSRect)frame;
+- (void)removeAllTextPointLayer;
+
+- (void)drawSelectionLayer:(NSRect)frame;
+- (void)resetSelectionLayer;
 
 - (void)updateLayerRect:(NSMutableDictionary *)frameDict;
 

@@ -282,6 +282,18 @@ BOOL isSameColor(NSColor *color1, NSColor *color2){
     return sublayer;
 
 }
+
+- (void)disableAction{
+    /*disable animation*/
+    /*sublayer disable animation*/
+    NSMutableDictionary *newActions = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
+                                       [NSNull null], @"position",
+                                       [NSNull null], @"bounds",
+                                       [NSNull null], @"sublayers",
+                                       [NSNull null], @"contents",
+                                       nil];
+    self.actions = newActions;
+}
 @end
 
 

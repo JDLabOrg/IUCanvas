@@ -45,11 +45,11 @@
     currentNode = [elementInformation objectForKey:WebElementDOMNodeKey];
     
     if([currentNode isKindOfClass:[DOMText class]]){
-        currentNode = [self textParentHTMLElement:currentNode];
+        currentNode = [self textParentIUElement:currentNode];
     }
     
     if(currentNode.idName){
-        IULog(@"%@", currentNode.idName);
+//        IULog(@"%@", currentNode.idName);
     }
 }
 
@@ -146,23 +146,29 @@
 
 - (void)reportFrameDict:(WebScriptObject *)scriptObj{
     NSMutableDictionary *scriptDict = [self convertWebScriptObjectToNSDictionary:scriptObj];
-    NSMutableDictionary *frameDict = [NSMutableDictionary dictionary];
+    NSMutableDictionary *iuFrameDict = [NSMutableDictionary dictionary];
+    NSMutableDictionary *gridFrameDict = [NSMutableDictionary dictionary];
     
     NSArray *keys = [scriptDict allKeys];
     for(NSString *key in keys){
         NSDictionary *innerDict = [scriptDict objectForKey:key];
         
-        CGFloat x = [[innerDict objectForKey:@"left"] floatValue];
-        CGFloat y = [[innerDict objectForKey:@"top"] floatValue];
+        CGFloat left = [[innerDict objectForKey:@"left"] floatValue];
+        CGFloat top = [[innerDict objectForKey:@"top"] floatValue];
+        CGFloat x = [[innerDict objectForKey:@"x"] floatValue];
+        CGFloat y = [[innerDict objectForKey:@"y"] floatValue];
         CGFloat w = [[innerDict objectForKey:@"width"] floatValue];
         CGFloat h = [[innerDict objectForKey:@"height"] floatValue];
         
-        NSRect frame = NSMakeRect(x, y, w, h);
-        [frameDict setObject:[NSValue valueWithRect:frame] forKey:key];
+        NSRect iuFrame = NSMakeRect(left, top, w, h);
+        [iuFrameDict setObject:[NSValue valueWithRect:iuFrame] forKey:key];
+        NSRect gridFrame = NSMakeRect(x, y, w, h);
+        [gridFrameDict setObject:[NSValue valueWithRect:gridFrame] forKey:key];
     }
     
     
-    [((CanvasWindowController *)(self.window.delegate)) updateFrameDictionary:frameDict];
+    [((CanvasWindowController *)(self.window.delegate)) updateIUFrameDictionary:iuFrameDict];
+    [((CanvasWindowController *)(self.window.delegate)) updateGridFrameDictionary:gridFrameDict];
     IULog(@"reportSharedFrameDict");
 }
 
@@ -175,9 +181,9 @@
 #pragma mark -
 #pragma mark text
 
-- (DOMHTMLElement *)textParentHTMLElement:(DOMNode *)node{
-    //find first div element node
-    if ([node.parentNode isKindOfClass:[DOMHTMLDivElement class]] ){
+- (DOMHTMLElement *)textParentIUElement:(DOMNode *)node{
+    NSString *iuName = [((DOMElement *)node.parentNode) getAttribute:@"iuname"];
+    if(iuName){
         return (DOMHTMLElement *)node.parentNode;
     }
     else if ([node.parentNode isKindOfClass:[DOMHTMLHtmlElement class]] ){
@@ -189,14 +195,19 @@
         return nil;
     }
     else {
-        return [self textParentHTMLElement:node.parentNode];
+        return [self textParentIUElement:node.parentNode];
     }
 }
 
 - (BOOL)webView:(WebView *)webView shouldInsertText:(NSString *)text replacingDOMRange:(DOMRange *)range givenAction:(WebViewInsertAction)action{
     
+    if(range.startContainer.childNodes.length > 0){
+        //맨 밑에 있는 div class에만 넣을 수 있음.
+        return NO;
+    }
+    
     NSLog(@"insert Text : %@", text);
-    DOMHTMLElement *insertedTextNode = [self textParentHTMLElement:range.startContainer];
+    DOMHTMLElement *insertedTextNode = [self textParentIUElement:range.startContainer];
     
     if(insertedTextNode != nil){
         [((CanvasWindowController *)(self.window.delegate)) updateHTMLText:insertedTextNode.innerHTML atIU:insertedTextNode.idName];
@@ -210,7 +221,7 @@
     
     
     NSLog(@"insert CSS : %@", style.cssText);
-    DOMHTMLElement *insertedTextNode = [self textParentHTMLElement:range.startContainer];
+    DOMHTMLElement *insertedTextNode = [self textParentIUElement:range.startContainer];
     
     if(insertedTextNode != nil){
         [((CanvasWindowController *)(self.window.delegate)) updateHTMLText:insertedTextNode.innerHTML atIU:insertedTextNode.idName];

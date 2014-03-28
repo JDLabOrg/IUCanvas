@@ -63,6 +63,7 @@ BOOL   isNSRectContainsRect(NSRect rect, NSRect subrect);
 @interface CALayer(JDExtension)
 -(id)addSubLayerFullFrame:(CALayer *)sublayer;
 -(id)insertSubLayerFullFrame:(CALayer *)sublayer below:(CALayer *)belowLayer;
+- (void)disableAction;
 
 @end
 @interface NSImageView(JDExtension)
