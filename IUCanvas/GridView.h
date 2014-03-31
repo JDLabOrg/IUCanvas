@@ -8,11 +8,13 @@
 
 #import <Cocoa/Cocoa.h>
 #import "PointLayer.h"
+#import "GuideLineLayer.h"
 
 @interface GridView : NSView{
-    CALayer *ghostLayer, *borderManagerLayer;
+    CALayer *selectionLayer, *ghostLayer;
+    CALayer *borderManagerLayer;
     CALayer *textManageLayer, *pointManagerLayer;
-    CALayer *selectionLayer;
+    GuideLineLayer *guideLayer;
     
     //for dragging - change width, height ofIU
     BOOL isClicked, isDragged;
@@ -39,5 +41,8 @@
 - (void)setGhost:(BOOL)ghost;
 - (void)setGhostImage:(NSImage *)image;
 - (void)setGhostPosition:(NSPoint)position;
+
+- (void)drawGuideLine:(NSArray *)array;
+- (void)clearGuideLine;
 
 @end

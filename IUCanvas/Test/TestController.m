@@ -48,6 +48,7 @@
 {
     [super windowDidLoad];
     
+    self.cssStr = @"#test{ position:absolute; width:100px; height:100px; top:200px; left:50px; background-color:blue;}";
     // Implement this method to handle any initialization after your window controller's window has been loaded from its nib file.
 }
 

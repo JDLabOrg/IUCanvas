@@ -21,7 +21,7 @@
 {
     self = [super initWithWindow:window];
     if (self) {
-        frameDict = [NSMutableDictionary dictionary];
+        frameDict = [[IUFrameDictionary alloc] init];;
         selectedIUs = [NSMutableArray array];
     }
     return self;
@@ -68,20 +68,20 @@
 }
 - (void)addSelectedIU:(NSString *)IU{
     [selectedIUs addObject:IU];
-    if([frameDict objectForKey:IU]){
-        NSRect frame = [[frameDict objectForKey:IU] rectValue];
+    if([frameDict.dict objectForKey:IU]){
+        NSRect frame = [[frameDict.dict objectForKey:IU] rectValue];
         [[self gridView] addRedPointLayer:IU withFrame:frame];
         [[self gridView] addTextPointLayer:IU withFrame:frame];
     }
 }
 
 - (void)selectIUInRect:(NSRect)frame{
-    NSArray *keys = [frameDict allKeys];
+    NSArray *keys = [frameDict.dict allKeys];
     
     [self removeSelectedAllIUs];
     
     for(NSString *key in keys){
-        NSRect iuframe = [[frameDict objectForKey:key] rectValue];
+        NSRect iuframe = [[frameDict.dict objectForKey:key] rectValue];
         if( NSIntersectsRect(iuframe, frame) ){
             [self addSelectedIU:key];
         }
@@ -250,11 +250,16 @@
     
     NSArray *keys = [gridFrameDict allKeys];
     for(NSString *key in keys){
-        if([frameDict objectForKey:key]){
-            [frameDict removeObjectForKey:key];
+        if([frameDict.dict objectForKey:key]){
+            [frameDict.dict removeObjectForKey:key];
         }
-        [frameDict setObject:[gridFrameDict objectForKey:key] forKey:key];
+        [frameDict.dict setObject:[gridFrameDict objectForKey:key] forKey:key];
     }
+    //draw guide line
+    for (NSString *IU in selectedIUs){
+        [[self gridView] drawGuideLine:[frameDict lineToDrawSamePositionWithIU:IU]];
+    }
+    
 }
 
 #pragma mark updatedText

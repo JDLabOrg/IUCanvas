@@ -42,6 +42,7 @@
         //initialize border manager
         borderManagerLayer = [CALayer layer];
         [borderManagerLayer disableAction];
+        [borderManagerLayer setHidden:YES];
         [self.layer insertSubLayerFullFrame:borderManagerLayer below:textManageLayer];
         
         //initialize ghost Layer
@@ -58,6 +59,10 @@
         [selectionLayer setBorderWidth:1.0];
         [selectionLayer disableAction];
         [self.layer insertSublayer:selectionLayer below:pointManagerLayer];
+        
+        //initialize guideline layer;
+        guideLayer = [[GuideLineLayer alloc] init];
+        [self.layer insertSubLayerFullFrame:guideLayer below:pointManagerLayer];
         
     }
     return self;
@@ -260,33 +265,6 @@
 -(void)drawSelectionLayer:(NSRect)frame{
     [selectionLayer setHidden:NO];
     [selectionLayer setFrame:frame];
-    /*
-    NSBezierPath *path = [NSBezierPath bezierPath];
-    
-    NSPoint start, end;
-    CGFloat x = floor(frame.origin.x);
-    CGFloat y = floor(frame.origin.y);
-    CGFloat w = floor(frame.size.width);
-    CGFloat h = floor(frame.size.height);
-    
-    
-    start = NSMakePoint(x, y);
-    end = NSMakePoint(x, y+h);
-    [path drawline:start end:end];
-    
-    end = NSMakePoint(x+w, y);
-    [path drawline:start end:end];
-    
-    start = NSMakePoint(x+w, y);
-    end = NSMakePoint(x+w, y+h);
-    [path drawline:start end:end];
-    
-    start = NSMakePoint(x, y+h);
-    end = NSMakePoint(x+w, y+h);
-    [path drawline:start end:end];
-    
-    selectionLayer.path = [path quartzPath];
-     */
 }
 
 - (void)resetSelectionLayer{
@@ -308,5 +286,16 @@
 }
 - (void)setGhostPosition:(NSPoint)position{
     [ghostLayer setPosition:position];
+}
+
+#pragma mark -
+#pragma mark guideLine layer
+
+- (void)drawGuideLine:(NSArray *)array{
+    [guideLayer drawLine:array];
+}
+
+- (void)clearGuideLine{
+    [guideLayer clearPath];
 }
 @end

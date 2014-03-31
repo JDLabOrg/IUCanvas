@@ -8,10 +8,11 @@
 
 #import <Cocoa/Cocoa.h>
 #import "WebCanvasView.h"
+#import "IUFrameDictionary.h"
 
 @interface CanvasWindowController : NSWindowController  <NSWindowDelegate>{
     NSMutableArray *selectedIUs;
-    NSMutableDictionary *frameDict;
+    IUFrameDictionary *frameDict;
 }
 
 #pragma mark -

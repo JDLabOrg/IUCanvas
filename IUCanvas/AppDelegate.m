@@ -25,10 +25,11 @@
     
 #pragma mark -
 #pragma mark canvas test
-#if 0
+#if 1
     self.testController = [[TestController alloc] initWithWindowNibName:@"TestController"];
     self.testController.mainWC = self.canvasWC;
     [self.testController showWindow:nil];
+    [self.canvasWC addSelectedIU:@"test"];
 #endif
 //    [self.canvasWC loadRequest:[NSURLRequest requestWithURL:
 //                            [NSURL fileURLWithPath:
