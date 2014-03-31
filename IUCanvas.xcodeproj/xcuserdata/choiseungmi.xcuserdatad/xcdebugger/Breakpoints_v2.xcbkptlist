@@ -20,11 +20,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "IUCanvas/WebCanvasView.m"
-            timestampString = "417682840.876346"
+            timestampString = "417694617.151792"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "208"
-            endingLineNumber = "208"
+            startingLineNumber = "224"
+            endingLineNumber = "224"
             landmarkName = "-webView:shouldInsertText:replacingDOMRange:givenAction:"
             landmarkType = "5">
          </BreakpointContent>
@@ -128,7 +128,7 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "IUCanvas/GridView.m"
@@ -138,6 +138,22 @@
             startingLineNumber = "157"
             endingLineNumber = "157"
             landmarkName = "-updateLayerRect:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "IUCanvas/Test/TestController.m"
+            timestampString = "417694445.292703"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "16"
+            endingLineNumber = "16"
+            landmarkName = "-beginDraggingSessionWithItems:event:source:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

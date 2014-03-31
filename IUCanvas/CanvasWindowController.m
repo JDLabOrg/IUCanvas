@@ -274,5 +274,8 @@
           IUID, frame.origin.x, frame.origin.y, frame.size.width, frame.size.height);
 }
 
+- (void)makeNewIU:(NSString *)iuname atPoint:(NSPoint)point{
+    IULog(@"[IU:%@] : point(%.1f, %.1f)", iuname, point.x, point.y);
+}
 
 @end

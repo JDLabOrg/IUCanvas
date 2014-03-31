@@ -9,6 +9,12 @@
 #import <Cocoa/Cocoa.h>
 #import "CanvasWindowController.h"
 
+@interface TestView: NSView
+@property (weak) IBOutlet NSImageView *imageV;
+
+- (IBAction)clickDragBtn:(id)sender;
+@end
+
 @interface TestController : NSWindowController
 
 @property id mainWC;
@@ -16,6 +22,7 @@
 @property NSString *cssStr, *cssSize;
 @property NSString *htmlStr;
 @property NSString *removeID;
+@property NSString *dragName;
 
 - (IBAction)clickCSSBtn:(id)sender;
 - (IBAction)clickHTMLBtn:(id)sender;

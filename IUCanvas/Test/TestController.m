@@ -7,6 +7,27 @@
 //
 
 #import "TestController.h"
+#import "IUDefinition.h"
+
+@implementation TestView: NSView
+
+/*
+- (NSDraggingSession *)beginDraggingSessionWithItems:(NSArray *)items event:(NSEvent *)event source:(id<NSDraggingSource>)source {
+//    [pboard declareTypes:[NSArray arrayWithObject:kUTTypeIUType] owner:self];
+//    [pboard setString:@"test" forType:(id)kUTTypeIUType];
+}
+
+ */
+- (IBAction)clickDragBtn:(id)sender {
+    NSPasteboard *pboard = [NSPasteboard pasteboardWithName:NSDragPboard];
+    [pboard declareTypes:[NSArray arrayWithObject:NSTIFFPboardType]  owner:self];
+    [pboard setData:[[self.imageV image] TIFFRepresentation] forType:NSTIFFPboardType];
+    
+    [self dragImage:[self.imageV image] at:self.imageV.frame.origin offset:self.imageV.frame.size
+              event:nil pasteboard:pboard source:self slideBack:YES];
+}
+@end
+
 
 @interface TestController ()
 
@@ -48,4 +69,7 @@
         [((CanvasWindowController *)self.mainWC)  removeIU:self.removeID];
     }
 }
+
+
+
 @end

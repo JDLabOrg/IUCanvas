@@ -9,6 +9,7 @@
 #import "WebCanvasView.h"
 #import "CanvasWindowController.h"
 #import "IULog.h"
+#import "IUDefinition.h"
 
 @implementation WebCanvasView
 
@@ -22,6 +23,9 @@
         [self setEditingDelegate:self];
         [self setFrameLoadDelegate:self];
         [self setEditable:YES];
+        
+        //FIXME: IUTYPE
+        [self registerForDraggedTypes:@[(id)kUTTypeIUType, NSStringPboardType]];
     }
     
     return self;
@@ -36,8 +40,21 @@
 #pragma mark mouse operation
 
 - (NSDragOperation)draggingEntered:(id<NSDraggingInfo>)sender{
-    //make new IU;
-    return [super draggingEntered:sender];
+    return NSDragOperationEvery;
+}
+
+- (BOOL)performDragOperation:(id<NSDraggingInfo>)sender{
+    //make new IU
+    NSPasteboard *pBoard = sender.draggingPasteboard;
+    NSPoint dragPoint = sender.draggingLocation;
+    NSString *iuName = [pBoard stringForType:(id)kUTTypeIUType];
+    if(iuName){
+        [((CanvasWindowController *)(self.window.delegate)) makeNewIU:iuName atPoint:dragPoint];
+        return YES;
+    }
+    IULog(@"[IU:%@], dragPoint(%.1f, %.1f)", iuName, dragPoint.x, dragPoint.y);
+
+    return NO;
 }
 
 - (void)webView:(WebView *)sender mouseDidMoveOverElement:(NSDictionary *)elementInformation modifierFlags:(NSUInteger)modifierFlags{
