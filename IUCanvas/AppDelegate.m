@@ -23,9 +23,13 @@
     [self.canvasWC loadHTMLString:html baseURL:url];
     
     
+    [self.canvasWC addFrame:800];
+    [self.canvasWC addFrame:400];
+    
+    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:YES] forKey:@"NSConstraintBasedLayoutVisualizeMutuallyExclusiveConstraints"];
 #pragma mark -
 #pragma mark canvas test
-#if 1
+#if 0
     self.testController = [[TestController alloc] initWithWindowNibName:@"TestController"];
     self.testController.mainWC = self.canvasWC;
     [self.testController showWindow:nil];

@@ -19,6 +19,35 @@
             <view key="contentView" id="2">
                 <rect key="frame" x="0.0" y="0.0" width="542" height="697"/>
                 <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <splitView dividerStyle="thin" translatesAutoresizingMaskIntoConstraints="NO" id="AqB-aM-Wdu">
+                        <rect key="frame" x="0.0" y="0.0" width="542" height="697"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <subviews>
+                            <customView id="gap-ei-WNx" customClass="SizeView">
+                                <rect key="frame" x="0.0" y="0.0" width="542" height="30"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="1vw-Yq-Q1z"/>
+                                </constraints>
+                            </customView>
+                            <customView fixedFrame="YES" id="86K-Iw-s4n">
+                                <rect key="frame" x="0.0" y="31" width="542" height="666"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                            </customView>
+                        </subviews>
+                        <holdingPriorities>
+                            <real value="300"/>
+                            <real value="250"/>
+                        </holdingPriorities>
+                    </splitView>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="bottom" secondItem="AqB-aM-Wdu" secondAttribute="bottom" id="9nU-yg-9fh"/>
+                    <constraint firstItem="AqB-aM-Wdu" firstAttribute="top" secondItem="2" secondAttribute="top" id="au9-cD-316"/>
+                    <constraint firstAttribute="trailing" secondItem="AqB-aM-Wdu" secondAttribute="trailing" id="bQh-fA-hLD"/>
+                    <constraint firstItem="AqB-aM-Wdu" firstAttribute="leading" secondItem="2" secondAttribute="leading" id="tg4-0t-Z8j"/>
+                </constraints>
             </view>
             <toolbar key="toolbar" implicitIdentifier="12F62429-43B5-4897-B6D1-320C7535EDB1" autosavesConfiguration="NO" displayMode="iconAndLabel" sizeMode="regular" id="9D4-we-4xn">
                 <allowedToolbarItems>
@@ -37,6 +66,8 @@
             </toolbar>
             <connections>
                 <outlet property="delegate" destination="-2" id="xNj-69-Wyc"/>
+                <outlet property="mainView" destination="86K-Iw-s4n" id="7Sk-pA-MrE"/>
+                <outlet property="sizeView" destination="gap-ei-WNx" id="VQc-YY-FnY"/>
             </connections>
         </window>
     </objects>

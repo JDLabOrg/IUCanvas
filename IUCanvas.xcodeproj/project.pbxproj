@@ -15,6 +15,8 @@
 		3DC2C1BA18E2BD31000B6E6F /* BorderLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DC2C1B918E2BD31000B6E6F /* BorderLayer.m */; };
 		3DC2C1BD18E3ECE8000B6E6F /* PointTextLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DC2C1BC18E3ECE8000B6E6F /* PointTextLayer.m */; };
 		3DC7DF1D18E9577000952015 /* GuideLineLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DC7DF1C18E9577000952015 /* GuideLineLayer.m */; };
+		3DC7DF2218EA914B00952015 /* InnerSizeBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DC7DF2118EA914B00952015 /* InnerSizeBox.m */; };
+		3DC7DF2518EA947600952015 /* SizeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DC7DF2418EA947600952015 /* SizeView.m */; };
 		3DE2257018DC44F300190847 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DE2256F18DC44F300190847 /* Cocoa.framework */; };
 		3DE2257A18DC44F300190847 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3DE2257818DC44F300190847 /* InfoPlist.strings */; };
 		3DE2257C18DC44F300190847 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DE2257B18DC44F300190847 /* main.m */; };
@@ -66,6 +68,10 @@
 		3DC2C1BE18E56951000B6E6F /* IUDefinition.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IUDefinition.h; sourceTree = "<group>"; };
 		3DC7DF1B18E9577000952015 /* GuideLineLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuideLineLayer.h; sourceTree = "<group>"; };
 		3DC7DF1C18E9577000952015 /* GuideLineLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GuideLineLayer.m; sourceTree = "<group>"; };
+		3DC7DF2018EA914B00952015 /* InnerSizeBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InnerSizeBox.h; sourceTree = "<group>"; };
+		3DC7DF2118EA914B00952015 /* InnerSizeBox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InnerSizeBox.m; sourceTree = "<group>"; };
+		3DC7DF2318EA947600952015 /* SizeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SizeView.h; sourceTree = "<group>"; };
+		3DC7DF2418EA947600952015 /* SizeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SizeView.m; sourceTree = "<group>"; };
 		3DE2256C18DC44F300190847 /* IUCanvas.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IUCanvas.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3DE2256F18DC44F300190847 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		3DE2257218DC44F300190847 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -164,6 +170,29 @@
 			name = Image;
 			sourceTree = "<group>";
 		};
+		3DC7DF1E18EA90F800952015 /* MainView */ = {
+			isa = PBXGroup;
+			children = (
+				3DE225AE18DC471A00190847 /* GridView.h */,
+				3DE225AF18DC471A00190847 /* GridView.m */,
+				3DE225AB18DC46ED00190847 /* WebCanvasView.h */,
+				3DE225AC18DC46ED00190847 /* WebCanvasView.m */,
+				3DC2C1A618E162F9000B6E6F /* GridLayers */,
+			);
+			name = MainView;
+			sourceTree = "<group>";
+		};
+		3DC7DF1F18EA913100952015 /* SizeView */ = {
+			isa = PBXGroup;
+			children = (
+				3DC7DF2318EA947600952015 /* SizeView.h */,
+				3DC7DF2418EA947600952015 /* SizeView.m */,
+				3DC7DF2018EA914B00952015 /* InnerSizeBox.h */,
+				3DC7DF2118EA914B00952015 /* InnerSizeBox.m */,
+			);
+			name = SizeView;
+			sourceTree = "<group>";
+		};
 		3DE2256318DC44F300190847 = {
 			isa = PBXGroup;
 			children = (
@@ -216,12 +245,9 @@
 				3DC2C1AF18E2B2D3000B6E6F /* CursorRect.m */,
 				3D5A861818E91DA60031F1A5 /* IUFrameDictionary.h */,
 				3D5A861918E91DA60031F1A5 /* IUFrameDictionary.m */,
-				3DC2C1A618E162F9000B6E6F /* GridLayers */,
+				3DC7DF1F18EA913100952015 /* SizeView */,
+				3DC7DF1E18EA90F800952015 /* MainView */,
 				3DE2258418DC44F300190847 /* MainMenu.xib */,
-				3DE225AE18DC471A00190847 /* GridView.h */,
-				3DE225AF18DC471A00190847 /* GridView.m */,
-				3DE225AB18DC46ED00190847 /* WebCanvasView.h */,
-				3DE225AC18DC46ED00190847 /* WebCanvasView.m */,
 				3DE225C618DFEBC000190847 /* CanvasWindow.h */,
 				3DE225C718DFEBC000190847 /* CanvasWindow.m */,
 				3DE225C118DFEB9F00190847 /* CanvasWindowController.h */,
@@ -390,10 +416,12 @@
 				3DC2C1B018E2B2D3000B6E6F /* CursorRect.m in Sources */,
 				3D5A861A18E91DA60031F1A5 /* IUFrameDictionary.m in Sources */,
 				3DE225C818DFEBC000190847 /* CanvasWindow.m in Sources */,
+				3DC7DF2218EA914B00952015 /* InnerSizeBox.m in Sources */,
 				3DC2C1A918E16341000B6E6F /* PointLayer.m in Sources */,
 				3DE2257C18DC44F300190847 /* main.m in Sources */,
 				3DC2C1BD18E3ECE8000B6E6F /* PointTextLayer.m in Sources */,
 				3DE225BB18DFD27E00190847 /* JDUIUtil.m in Sources */,
+				3DC7DF2518EA947600952015 /* SizeView.m in Sources */,
 				3DE225AD18DC46ED00190847 /* WebCanvasView.m in Sources */,
 				3DE225D918E03D3F00190847 /* TestController.m in Sources */,
 				3DE225B018DC471A00190847 /* GridView.m in Sources */,

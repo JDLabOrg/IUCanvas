@@ -17,10 +17,15 @@
     self.webView = [[WebCanvasView alloc] init];
     self.gridView = [[GridView alloc] init];
     
-    [self.contentView addSubviewFullFrame:self.webView];
-    [self.contentView addSubviewFullFrame:self.gridView];
+    [self.mainView addSubviewFullFrame:self.webView];
+    [self.mainView addSubviewFullFrame:self.gridView];
 }
 
+- (void)setWidthOfMainView:(CGFloat)width{
+    [self.mainView setWidth:width];
+    CGFloat x = ([[self contentView] frame].size.width - width)/2;
+    [self.mainView setX:x];
+}
 
 
 #pragma mark -
@@ -47,18 +52,12 @@
     return YES;
 }
 
--  (BOOL)pointInContentView:(NSPoint)point{
-    NSRect originalFrame = [self.contentView frame];
-    NSRect contentFrame = NSMakeRect(originalFrame.origin.x+12,
-                                     originalFrame.origin.y+12,
-                                     originalFrame.size.width-24,
-                                     originalFrame.size.height-24);
-    
-    if(NSPointInRect(point, contentFrame)){
-        return YES;
+-  (BOOL)pointInMainView:(NSPoint)point{
+    if (point.x <0 || point.y < 0){
+        return NO;
     }
     
-    return NO;
+    return YES;
 }
 
 -(void)sendEvent:(NSEvent *)theEvent{
@@ -69,7 +68,7 @@
     
     if([hitView isKindOfClass:[GridView class]] == NO){
         
-        if( [self pointInContentView:originalPoint]){
+        if( [self pointInMainView:convertedPoint]){
             
             if ( theEvent.type == NSLeftMouseDown){
                 IULog(@"mouse down");

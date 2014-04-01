@@ -9,7 +9,7 @@
 #import "CanvasWindowController.h"
 #import "CanvasWindow.h"
 #import "IULog.h"
-
+#import "SizeView.h"
 @interface CanvasWindowController (){
 }
 
@@ -32,6 +32,20 @@
     [super windowDidLoad];
 }
 
+#pragma mark -
+#pragma mark sizeView
+
+
+- (SizeView *)sizeView{
+    return ((CanvasWindow *)self.window).sizeView;
+
+}
+- (void)addFrame:(NSInteger)width{
+    [[self sizeView] addFrame:width];
+}
+- (void)removeFrame:(NSInteger)width{
+    [[self sizeView] removeFrame:width];
+}
 
 #pragma mark -
 #pragma mark webView

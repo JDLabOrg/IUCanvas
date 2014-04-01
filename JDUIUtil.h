@@ -52,6 +52,10 @@ BOOL   isNSRectContainsRect(NSRect rect, NSRect subrect);
 -(id)addSubviewFullFrame:(NSView*)subview;
 -(id)addSubviewFullFrame:(NSView*)subview atPosition:(NSWindowOrderingMode)place;
 - (void)addSubviewFullFrame:(NSView *)aView positioned:(NSWindowOrderingMode)place relativeTo:(NSView *)otherView;
+- (void)addSubviewMiddleInFrameWithFrame:(NSView *)aView;
+- (void)addSubviewMiddleInFrameWithFrame:(NSView *)aView positioned:(NSWindowOrderingMode)place relativeTo:(NSView *)otherView;
+- (void)addSubviewVeriticalCenterInFrameWithFrame:(NSView *)aView height:(CGFloat)height;
+
 -(void)setX:(CGFloat)x;
 -(void)setY:(CGFloat)y;
 -(void)setWidth:(CGFloat)width;

@@ -18,6 +18,10 @@
 #pragma mark -
 #pragma mark be set by IU
 
+//set frame size
+- (void)addFrame:(NSInteger)width;
+- (void)removeFrame:(NSInteger)width;
+
 //load page
 - (void)loadRequest:(NSURLRequest *)request;
 - (void)loadHTMLString:(NSString *)htmlString baseURL:(NSURL *)URL;
