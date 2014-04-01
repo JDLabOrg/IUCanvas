@@ -68,6 +68,13 @@
     return NO;
 }
 
+- (BOOL)isInGuideLine:(CGFloat)a b:(CGFloat)b{
+    if(abs(a-b) <=5.0){
+        return YES;
+    }
+    return NO;
+}
+
 - (NSArray *)allKeysExceptKey:(NSString *)key{
     NSMutableArray *allKeys = [[self.dict allKeys] mutableCopy];
     //자기자신 제외
@@ -82,22 +89,22 @@
     CGFloat value;
     switch (type) {
         case IUFrameLineTop:
-            value = frame.origin.y;
+            value = NSMinY(frame);
             break;
         case IUFrameLineHorizontalCenter:
-            value = frame.origin.y + frame.size.height/2;
+            value = NSMidY(frame);
             break;
         case IUFrameLineBottom:
-            value = frame.origin.y + frame.size.height;
+            value = NSMaxY(frame);
             break;
         case IUFrameLineLeft:
-            value = frame.origin.x;
+            value = NSMinX(frame);
             break;
         case IUFrameLineVerticalCenter:
-            value = frame.origin.x + frame.size.width/2;
+            value = NSMidX(frame);
             break;
         case IUFrameLineRight:
-            value = frame.origin.x + frame.size.width;
+            value = NSMaxX(frame);
             break;
         default:
             NSLog(@"warning : there is no type");
@@ -106,6 +113,95 @@
     return value;
 }
 
+#pragma mark -
+#pragma mark check within 5pixel
+
+
+
+- (NSPoint)guidePointOfCurrentFrame:(NSRect)frame IU:(NSString *)IU{
+    
+    NSPoint point = NSMakePoint(frame.origin.x, frame.origin.y);
+    
+    for(int i=IUFrameLineTop; i<=IUFrameLineBottom; i++ ){
+        NSRect guideFrame = [self findHorizontalGuideLine:IU type:(IUFrameLine)i];
+        if( NSIsEmptyRect(guideFrame) ){
+            point.y = guideFrame.origin.y;
+        }
+    }
+    
+    for(int i=IUFrameLineLeft; i<=IUFrameLineRight; i++ ){
+        NSRect guideFrame = [self findVerticalGuideLine:IU type:(IUFrameLine)i];
+        if( NSIsEmptyRect(guideFrame) ){
+            point.x = guideFrame.origin.x;
+        }
+    }
+    return point;
+}
+
+
+- (NSSize)guideSizeOfCurrentFrame:(NSRect)frame IU:(NSString *)IU{
+    NSArray *allKeys = [self allKeysExceptKey:IU];
+    NSSize guideSize = frame.size;
+
+    
+    for(NSString *compareKey in allKeys){
+        
+        NSRect compareFrame = [[self.dict objectForKey:compareKey] rectValue];
+        
+        if( [self isInGuideLine:NSMaxX(frame) b:NSMaxX(compareFrame)]) {
+            guideSize.width = NSMaxX(compareFrame) - NSMinX(frame);
+        }
+        
+        if( [self isInGuideLine:NSMaxY(frame) b:NSMaxY(compareFrame)]){
+            guideSize.height = NSMaxY(compareFrame) - NSMinY(frame);
+        }
+        
+    }
+    
+    return guideSize;
+}
+
+
+#pragma mark -
+#pragma mark find guide location
+
+- (NSRect)findHorizontalGuideLine:(NSString *)key type:(IUFrameLine)type {
+    NSArray *allKeys = [self allKeysExceptKey:key];
+    NSRect keyRect = [[self.dict objectForKey:key] rectValue];
+    CGFloat typeY = [self floatValue:keyRect withType:type];
+    
+    for(NSString *compareKey in allKeys){
+        
+        NSRect frame = [[self.dict objectForKey:compareKey] rectValue];
+        CGFloat compareY = [self floatValue:frame withType:type];
+        
+        if( [self isInGuideLine:typeY b:compareY]) {
+            return frame;
+        }
+        
+    }
+
+    return NSZeroRect;
+}
+
+- (NSRect)findVerticalGuideLine:(NSString *)key type:(IUFrameLine)type {
+    NSArray *allKeys = [self allKeysExceptKey:key];
+    NSRect keyRect = [[self.dict objectForKey:key] rectValue];
+    CGFloat typeX = [self floatValue:keyRect withType:type];
+    
+    
+    for(NSString *compareKey in allKeys){
+        
+        NSRect frame = [[self.dict objectForKey:compareKey] rectValue];
+        CGFloat compareX = [self floatValue:frame withType:type];
+        
+        if( [self isInGuideLine:typeX b:compareX]) {
+            return frame;
+        }
+        
+    }
+    return NSZeroRect;
+}
 
 #pragma mark -
 #pragma mark find same location
@@ -113,8 +209,8 @@
 - (PointLine *)sameHorizontalLine:(NSString *)key type:(IUFrameLine)type {
     NSArray *allKeys = [self allKeysExceptKey:key];
     NSRect keyRect = [[self.dict objectForKey:key] rectValue];
-    CGFloat minX = keyRect.origin.x;
-    CGFloat maxX = keyRect.origin.x+keyRect.size.height;
+    CGFloat minX = NSMinX(keyRect);
+    CGFloat maxX = NSMaxX(keyRect);
     CGFloat typeY = [self floatValue:keyRect withType:type];
     BOOL isFind = NO;
     
@@ -126,11 +222,11 @@
         if( [self isSameFloat:typeY b:compareY]) {
             isFind = YES;
             
-            if(minX > frame.origin.x){
-                minX = frame.origin.x;
+            if(minX > NSMinX(frame)){
+                minX = NSMinX(frame);
             }
-            if(maxX < frame.origin.x+frame.size.width){
-                maxX = frame.origin.x+frame.size.width;
+            if(maxX < NSMaxX(frame)){
+                maxX = NSMaxX(frame);
             }
 
         }
@@ -151,8 +247,8 @@
 - (PointLine *)sameVerticalLine:(NSString *)key type:(IUFrameLine)type {
     NSArray *allKeys = [self allKeysExceptKey:key];
     NSRect keyRect = [[self.dict objectForKey:key] rectValue];
-    CGFloat minY = keyRect.origin.y;
-    CGFloat maxY = keyRect.origin.y+keyRect.size.height;
+    CGFloat minY = NSMinY(keyRect);
+    CGFloat maxY = NSMaxY(keyRect);
     CGFloat typeX = [self floatValue:keyRect withType:type];
     BOOL isFind = NO;
 
@@ -164,11 +260,11 @@
         
         if( [self isSameFloat:typeX b:compareX]) {
             isFind = YES;
-            if(minY > frame.origin.y){
-                minY = frame.origin.y;
+            if(minY > NSMinY(frame)){
+                minY = NSMinY(frame);
             }
-            if(maxY < frame.origin.y+frame.size.height){
-                maxY = frame.origin.y+frame.size.height;
+            if(maxY < NSMaxY(frame)){
+                maxY = NSMaxY(frame);
             }
         }
         

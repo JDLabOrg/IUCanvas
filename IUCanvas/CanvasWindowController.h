@@ -56,6 +56,6 @@
 - (void)moveDiffPoint:(NSPoint)point;
 - (void)changeIUFrame:(NSRect)frame IUID:(NSString *)IUID;
 
-- (void)makeNewIU:(NSString *)iuname atPoint:(NSPoint)point;
+- (void)makeNewIU:(NSString *)iuname atPoint:(NSPoint)point atIU:(NSString *)IU;
 
 @end

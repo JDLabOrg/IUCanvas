@@ -269,18 +269,34 @@
 }
 
 #pragma mark moveIU
+//drag & drop after select IU
 - (void)moveDiffPoint:(NSPoint)point{
-    
+    for(NSString *IUName in selectedIUs){
+        NSRect currentFrame = [[frameDict.dict objectForKey:IUName] rectValue];
+        NSRect moveFrame = currentFrame;
+        
+        moveFrame.origin = NSMakePoint(currentFrame.origin.x+point.x, currentFrame.origin.y+point.y);
+        NSPoint guidePoint = [frameDict guidePointOfCurrentFrame:moveFrame IU:IUName];
+        moveFrame.origin = guidePoint;
+        //TODO: set TO IU
+    }
     IULog(@"Point:(%.1f %.1f)", point.x, point.y);
 }
+//drag pointlayer // only one IU
 - (void)changeIUFrame:(NSRect)frame IUID:(NSString *)IUID{
-    
+
+    NSRect guideFrame = frame;
+    guideFrame.origin = [frameDict guidePointOfCurrentFrame:frame IU:IUID];
+    guideFrame.size = [frameDict guideSizeOfCurrentFrame:frame IU:IUID];
+
+    //TODO: set TO IU
     IULog(@"[IU:%@]\n origin: (%.1f, %.1f) \n size: (%.1f, %.1f)",
-          IUID, frame.origin.x, frame.origin.y, frame.size.width, frame.size.height);
+          IUID, guideFrame.origin.x, guideFrame.origin.y, guideFrame.size.width, guideFrame.size.height);
 }
 
-- (void)makeNewIU:(NSString *)iuname atPoint:(NSPoint)point{
-    IULog(@"[IU:%@] : point(%.1f, %.1f)", iuname, point.x, point.y);
+//FIXME: inner IU도 표시
+- (void)makeNewIU:(NSString *)iuname atPoint:(NSPoint)point atIU:(NSString *)IU{
+    IULog(@"[IU:%@] : point(%.1f, %.1f) atIU:%@", iuname, point.x, point.y, IU);
 }
 
 @end

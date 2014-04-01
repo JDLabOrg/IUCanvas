@@ -86,7 +86,10 @@
                     if([self canAddIU:currentIUID]){
                         [((CanvasWindowController *)self.delegate) addSelectedIU:currentIUID];
                     }
-                    isSelected = YES;
+                    
+                    if([self.webView isDOMTextAtPoint:convertedPoint] == NO){
+                        isSelected = YES;
+                    }
                     startDragPoint = convertedPoint;
                     middleDragPoint = startDragPoint;
                 }
@@ -124,10 +127,11 @@
             
             if(isSelected){
                 isSelected = NO;
+                [self.gridView clearGuideLine];
             }
             if(isDragged){
                 isDragged = NO;
-                
+                [self.gridView clearGuideLine];
             }
             if(isSelectDragged){
                 isSelectDragged = NO;

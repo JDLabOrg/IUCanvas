@@ -13,7 +13,7 @@
     DOMHTMLElement *currentNode;
 }
 
-- (NSString *)IDOfCurrentIU;
 - (void)updateFrameDict;
-
+- (NSString *)IDOfCurrentIU;
+- (BOOL)isDOMTextAtPoint:(NSPoint)point;
 @end

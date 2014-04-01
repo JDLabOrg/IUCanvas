@@ -48,14 +48,18 @@
     NSPasteboard *pBoard = sender.draggingPasteboard;
     NSPoint dragPoint = sender.draggingLocation;
     NSString *iuName = [pBoard stringForType:(id)kUTTypeIUType];
+    NSString *parentIUName = [self IUAtPoint:dragPoint];
     if(iuName){
-        [((CanvasWindowController *)(self.window.delegate)) makeNewIU:iuName atPoint:dragPoint];
+        [((CanvasWindowController *)(self.window.delegate)) makeNewIU:iuName atPoint:dragPoint atIU:parentIUName];
         return YES;
     }
+    
+
     IULog(@"[IU:%@], dragPoint(%.1f, %.1f)", iuName, dragPoint.x, dragPoint.y);
 
     return NO;
 }
+
 
 - (void)webView:(WebView *)sender mouseDidMoveOverElement:(NSDictionary *)elementInformation modifierFlags:(NSUInteger)modifierFlags{
     //whem mouse move, save current element!
@@ -70,7 +74,15 @@
     }
 }
 
+- (NSString *)IUAtPoint:(NSPoint)point{
+    DOMHTMLElement *htmlElement = (DOMHTMLElement *)[self DOMElementAtPoint:point];
 
+    if([htmlElement isKindOfClass:[DOMText class]]){
+        htmlElement = [self textParentIUElement:htmlElement];
+    }
+    
+    return [self IUNameOfDomElement:htmlElement];
+}
 
 #pragma mark -
 #pragma mark Javascript with WebView
@@ -200,7 +212,7 @@
 
 - (DOMHTMLElement *)textParentIUElement:(DOMNode *)node{
     NSString *iuName = [((DOMElement *)node.parentNode) getAttribute:@"iuname"];
-    if(iuName){
+    if(iuName && iuName.length != 0){
         return (DOMHTMLElement *)node.parentNode;
     }
     else if ([node.parentNode isKindOfClass:[DOMHTMLHtmlElement class]] ){
@@ -218,21 +230,34 @@
 
 - (BOOL)webView:(WebView *)webView shouldInsertText:(NSString *)text replacingDOMRange:(DOMRange *)range givenAction:(WebViewInsertAction)action{
     
-    if(range.startContainer.childNodes.length > 0){
-        //맨 밑에 있는 div class에만 넣을 수 있음.
-        return NO;
-    }
+    DOMNode *node = range.startContainer;
+    BOOL isWritable =  NO;
     
-    NSLog(@"insert Text : %@", text);
-    DOMHTMLElement *insertedTextNode = [self textParentIUElement:range.startContainer];
-    
-    if(insertedTextNode != nil){
-        [((CanvasWindowController *)(self.window.delegate)) updateHTMLText:insertedTextNode.innerHTML atIU:insertedTextNode.idName];
-        return YES;
+    //check to insert Text
+    if([node isKindOfClass:[DOMText class] ]){
+        isWritable = YES;
     }
     else {
-        return NO;
+        if([node isNotEqualTo:currentNode]){
+            return NO;
+        }
+        NSString *writableValue = [((DOMElement *)node) getAttribute:@"isWritable"];
+        if(writableValue){
+            isWritable = [writableValue boolValue];
+        }
     }
+
+    //insert Text
+    if (isWritable){
+        NSLog(@"insert Text : %@", text);
+        DOMHTMLElement *insertedTextNode = [self textParentIUElement:node];
+        
+        if(insertedTextNode != nil){
+            [((CanvasWindowController *)(self.window.delegate)) updateHTMLText:insertedTextNode.innerHTML atIU:insertedTextNode.idName];
+            return YES;
+        }
+    }
+    return NO;
 }
 - (BOOL)webView:(WebView *)webView shouldApplyStyle:(DOMCSSStyleDeclaration *)style toElementsInDOMRange:(DOMRange *)range{
     
@@ -252,6 +277,11 @@
 
 #pragma mark -
 #pragma mark manage IU
+
+- (NSString *)IUNameOfDomElement:(DOMElement *)element{
+    NSString *iuName = [element getAttribute:@"iuname"];
+    return iuName;
+}
 - (NSString *)IDOfCurrentIU{
     if( [currentNode isKindOfClass:[DOMHTMLElement class]] ){
         return [currentNode idName];
@@ -259,6 +289,19 @@
     return nil;
 }
 
+- (DOMElement *)DOMElementAtPoint:(NSPoint)point{
+    NSDictionary *dict  =[self elementAtPoint:point];
+    DOMElement *element = [dict objectForKey:WebElementDOMNodeKey];
+    return element;
+}
+
+- (BOOL)isDOMTextAtPoint:(NSPoint)point{
+    DOMElement *element = [self DOMElementAtPoint:point];
+    if([element isKindOfClass:[DOMText class]]){
+        return YES;
+    }
+    return NO;
+}
 
 
 @end

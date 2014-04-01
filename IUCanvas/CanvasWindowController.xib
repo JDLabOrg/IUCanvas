@@ -20,6 +20,21 @@
                 <rect key="frame" x="0.0" y="0.0" width="542" height="697"/>
                 <autoresizingMask key="autoresizingMask"/>
             </view>
+            <toolbar key="toolbar" implicitIdentifier="12F62429-43B5-4897-B6D1-320C7535EDB1" autosavesConfiguration="NO" displayMode="iconAndLabel" sizeMode="regular" id="9D4-we-4xn">
+                <allowedToolbarItems>
+                    <toolbarItem implicitItemIdentifier="NSToolbarShowColorsItem" id="Vj2-16-qHm"/>
+                    <toolbarItem implicitItemIdentifier="NSToolbarShowFontsItem" id="asn-CB-QTS"/>
+                    <toolbarItem implicitItemIdentifier="NSToolbarPrintItem" id="Ou3-Cy-n3h"/>
+                    <toolbarItem implicitItemIdentifier="NSToolbarSpaceItem" id="YHB-bC-KHv"/>
+                    <toolbarItem implicitItemIdentifier="NSToolbarFlexibleSpaceItem" id="nln-8m-red"/>
+                </allowedToolbarItems>
+                <defaultToolbarItems>
+                    <toolbarItem reference="Vj2-16-qHm"/>
+                    <toolbarItem reference="asn-CB-QTS"/>
+                    <toolbarItem reference="nln-8m-red"/>
+                    <toolbarItem reference="Ou3-Cy-n3h"/>
+                </defaultToolbarItems>
+            </toolbar>
             <connections>
                 <outlet property="delegate" destination="-2" id="xNj-69-Wyc"/>
             </connections>
