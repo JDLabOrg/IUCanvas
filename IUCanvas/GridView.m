@@ -82,7 +82,7 @@
 #pragma mark mouse operation
 
 - (NSView *)hitTest:(NSPoint)aPoint{
-    NSPoint convertedPoint = [self convertPoint:aPoint fromView:nil];
+    NSPoint convertedPoint = [self convertPoint:aPoint fromView:self.superview];
     CALayer *hitLayer = [self hitTestInnerPointLayer:convertedPoint];
     if( hitLayer ){
         return self;

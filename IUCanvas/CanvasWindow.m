@@ -17,8 +17,7 @@
 - (void)awakeFromNib{
     self.webView = [[WebCanvasView alloc] init];
     self.gridView = [[GridView alloc] init];
-    
-    
+        
     [self.mainView addSubviewFullFrame:self.webView];
     [self.mainView addSubviewFullFrame:self.gridView];
     
@@ -70,8 +69,8 @@
 -(void)sendEvent:(NSEvent *)theEvent{
     
     NSPoint originalPoint = [theEvent locationInWindow];
-    NSView *hitView = [self.gridView hitTest:originalPoint];
-    NSPoint convertedPoint = [self.gridView convertPoint:originalPoint fromView:nil];
+    NSPoint convertedPoint = [self.mainView convertPoint:originalPoint fromView:nil];
+    NSView *hitView = [self.gridView hitTest:convertedPoint];
     
     if([hitView isKindOfClass:[GridView class]] == NO){
         

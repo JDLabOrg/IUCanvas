@@ -106,8 +106,8 @@
         [boxManageView addSubviewMiddleInFrameWithFrame:newBox];
     }
     else{
-        NSView *firstView = boxManageView.subviews[0];
-        [boxManageView addSubviewMiddleInFrameWithFrame:newBox positioned:NSWindowAbove relativeTo:firstView];
+        NSView *frontView = boxManageView.subviews[boxManageView.subviews.count-1];
+        [boxManageView addSubviewMiddleInFrameWithFrame:newBox positioned:NSWindowAbove relativeTo:frontView];
     }
     return newBox;
 
