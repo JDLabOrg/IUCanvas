@@ -59,11 +59,10 @@
 }
 
 -  (BOOL)pointInMainView:(NSPoint)point{
-    if (point.x <0 || point.y < 0){
-        return NO;
+    if (NSPointInRect(point, self.mainView.bounds)){
+        return YES;
     }
-    
-    return YES;
+    return NO;
 }
 
 -(void)sendEvent:(NSEvent *)theEvent{
@@ -124,15 +123,18 @@
                 
                 middleDragPoint = endDragPoint;
             }
+            
+        //END : mainView handling
         }
         
         
         if ( theEvent.type == NSLeftMouseUp ){
             //        IULog(@"NSLeftMouseUp");
             
+            [self.gridView clearGuideLine];
+            
             if(isSelected){
                 isSelected = NO;
-                [self.gridView clearGuideLine];
             }
             if(isDragged){
                 isDragged = NO;
