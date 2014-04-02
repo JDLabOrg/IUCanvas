@@ -33,6 +33,19 @@
     // Drawing code here.
 }
 
+#pragma mark -
+#pragma mark mouse
+
+- (void)mouseDown:(NSEvent *)theEvent{
+    [super mouseDown:theEvent];
+    if(theEvent.clickCount == 1){
+        [self select];
+    }
+}
+
+#pragma mark -
+#pragma mark open
+
 - (CGFloat)frameSize{
     return self.frame.size.width;
 }
@@ -53,11 +66,5 @@
     }
 }
 
-- (void)mouseDown:(NSEvent *)theEvent{
-    [super mouseDown:theEvent];
-    if(theEvent.clickCount == 2){
-        [self select];
-    }
-}
 
 @end

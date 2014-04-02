@@ -63,6 +63,13 @@
     // Drawing code here.
 }
 
+- (void)resetCursorRects{
+    InnerSizeBox *maxBox = (InnerSizeBox *)boxManageView.subviews[0];
+    [self addCursorRect:[maxBox frame] cursor:[NSCursor pointingHandCursor]];
+}
+
+#pragma mark -
+
 - (NSArray *)sortedArray{
     return [sizeArray sortedArrayUsingSelector:@selector(compare:)];
 }
