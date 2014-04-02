@@ -9,6 +9,7 @@
 #import "SizeView.h"
 #import "JDUIUtil.h"
 #import "CanvasWindow.h"
+#import "IUDefinition.h"
 
 @implementation SizeTextField : NSTextField
 - (id)init{
@@ -49,7 +50,8 @@
         [self addSubviewFullFrame:boxManageView positioned:NSWindowBelow relativeTo:sizeTextField];
         
         //defaultFrame
-        [self addFrame:960];
+        InnerSizeBox *defaultBox = [self addFrame:defaultFrameWidth];
+        [defaultBox select];
     }
     return self;
 }
@@ -67,9 +69,17 @@
 
 #pragma mark -
 #pragma mark select
+- (CGFloat)selectedFrameWidth{
+    InnerSizeBox *selectedBox = [boxManageView.subviews objectAtIndex:selectIndex];
+    return [selectedBox frameSize];
+}
+
+
 - (void)selectBox:(InnerSizeBox *)selectBox{
-    InnerSizeBox *deselectBox = [boxManageView.subviews objectAtIndex:selectIndex];
-    [deselectBox deselect];
+    if(boxManageView.subviews.count > 1){
+        InnerSizeBox *deselectBox = [boxManageView.subviews objectAtIndex:selectIndex];
+        [deselectBox deselect];
+    }
     selectIndex = [boxManageView.subviews indexOfObject:selectBox];
     
     [sizeTextField setStringValue:[NSString stringWithFormat:@"%.0f", selectBox.frame.size.width]];
@@ -79,7 +89,7 @@
 #pragma mark -
 #pragma mark add, remove width
 
-- (void)addFrame:(NSInteger)width{
+- (id)addFrame:(NSInteger)width{
     NSNumber *widthNumber = [NSNumber numberWithInteger:width];
     [sizeArray addObject:widthNumber];
     NSRect boxFrame = NSMakeRect(0, 0, width, self.frame.size.height);
@@ -99,6 +109,7 @@
         NSView *firstView = boxManageView.subviews[0];
         [boxManageView addSubviewMiddleInFrameWithFrame:newBox positioned:NSWindowAbove relativeTo:firstView];
     }
+    return newBox;
 
 }
 - (void)removeFrame:(NSInteger)width{

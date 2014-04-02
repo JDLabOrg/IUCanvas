@@ -13,6 +13,7 @@
 @property id boxDelegate;
 
 - (CGFloat)frameSize;
+- (void)select;
 - (void)deselect;
 
 

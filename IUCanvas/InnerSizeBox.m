@@ -42,17 +42,21 @@
     [self setFillColor:[NSColor whiteColor]];
 }
 
+- (void)select{
+    [self setBorderColor:[NSColor selectedMenuItemColor]];
+    [self setFillColor:[NSColor selectedControlColor]];
+    
+    //send other sizeBox release
+    if(self.boxDelegate && [self.boxDelegate respondsToSelector:@selector(selectBox:)]){
+        [(SizeView *)self.boxDelegate selectBox:self];
+        
+    }
+}
+
 - (void)mouseDown:(NSEvent *)theEvent{
     [super mouseDown:theEvent];
     if(theEvent.clickCount == 2){
-        [self setBorderColor:[NSColor selectedMenuItemColor]];
-        [self setFillColor:[NSColor selectedControlColor]];
-        
-        //send other sizeBox release
-        if(self.boxDelegate && [self.boxDelegate respondsToSelector:@selector(selectBox:)]){
-                [(SizeView *)self.boxDelegate selectBox:self];
-            
-        }
+        [self select];
     }
 }
 

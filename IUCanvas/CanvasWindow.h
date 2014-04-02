@@ -11,6 +11,7 @@
 #import "GridView.h"
 #import "SizeView.h"
 
+
 @interface CanvasWindow : NSWindow{
     BOOL isSelected, isDragged, isSelectDragged;
     NSPoint startDragPoint, middleDragPoint, endDragPoint;

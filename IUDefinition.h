@@ -10,6 +10,6 @@
 #define IUCanvas_IUDefinition_h
 
 #define kUTTypeIUType       @"kUTTypeIUType"
-
+#define defaultFrameWidth 960
 
 #endif

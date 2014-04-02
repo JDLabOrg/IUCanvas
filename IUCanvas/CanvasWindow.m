@@ -10,6 +10,7 @@
 #import "CanvasWindowController.h"
 #import "JDUIUtil.h"
 #import "IULog.h"
+#import "IUDefinition.h"
 
 @implementation CanvasWindow
 
@@ -17,8 +18,11 @@
     self.webView = [[WebCanvasView alloc] init];
     self.gridView = [[GridView alloc] init];
     
+    
     [self.mainView addSubviewFullFrame:self.webView];
     [self.mainView addSubviewFullFrame:self.gridView];
+    
+    [self setWidthOfMainView:defaultFrameWidth];
 }
 
 - (void)setWidthOfMainView:(CGFloat)width{

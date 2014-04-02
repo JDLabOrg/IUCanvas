@@ -20,8 +20,9 @@
 }
 
 - (void)selectBox:(InnerSizeBox *)selectBox;
+- (CGFloat)selectedFrameWidth;
 
-- (void)addFrame:(NSInteger)width;
+- (id)addFrame:(NSInteger)width;
 - (void)removeFrame:(NSInteger)width;
 
 @end

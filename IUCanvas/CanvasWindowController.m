@@ -33,6 +33,14 @@
 }
 
 #pragma mark -
+#pragma mark window delegate
+
+-(void)windowDidResize:(NSNotification *)notification{
+    CGFloat selectedWidth =  [[self sizeView] selectedFrameWidth];
+    [((CanvasWindow *)self.window) setWidthOfMainView:selectedWidth];
+}
+
+#pragma mark -
 #pragma mark sizeView
 
 
